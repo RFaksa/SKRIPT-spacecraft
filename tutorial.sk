@@ -1,0 +1,9 @@
+command /tutorial [<text>]:
+  trigger:
+    if {tutorial::%player%} is set:
+      send "&cYou have already done the tutorial."
+      stop
+    if arg-1 is "skip":
+      set {tutorial::%player%} to "skip"
+      execute console command "/pex user %player% add space.ship"
+      make player execute command "/s create"

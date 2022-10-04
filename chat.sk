@@ -1,0 +1,94 @@
+on chat:
+  if {friend.add::%player%} is 1:
+    cancel event
+    if {friend.add::%player%} is player:
+      send "&cDon't you have friends that you want to be friends with yourself?" to player
+      delete {friend.add::%player%}
+      stop
+    else:
+      set {friend.add::%player%} to message parsed as player
+      if {friend.add::%player%} is online:
+        send "&aFriend request send to &2%{friend.add::%player%}%" to player
+        set {friend.add::%{friend.add::%player%}%} to player
+        send "&aFriend request from &2%player%" to {friend.add::%player%}
+        send "<command:/friendadd>&a&l[Accept friend request]<reset>" to {friend.add::%player%}
+      else:
+        send "&cPlayer is offline" to player
+        delete {friend.add::%player%}
+      stop
+  cancel event
+  if {last.message::%player%} = message:
+    send "&cYou can not spam here!" to player
+    stop
+  set {last.message::%player%} to message
+  replace all "pindik" with "***" in message
+  if player have permission "vip":
+    set {_r} to "&e&l[&a&lVIP&e&l]&e"
+  if player have permission "vip+":
+    set {_r} to "&e&l[&a&lVIP+&e&l]&e"
+  if player have permission "owner":
+    set {_r} to "&4&l[&c&lOwner&4&l]&c"
+  if {title::%player%} is set:
+    set {_d} to "%{title::%player%}%"
+    if {_r} is set:
+      send "%{_r}% %{_d}% %player%&f: &f%message%" to all players
+      stop
+    else:
+      replace all "&1" with "" in message
+      replace all "&2" with "" in message
+      replace all "&3" with "" in message
+      replace all "&4" with "" in message
+      replace all "&5" with "" in message
+      replace all "&6" with "" in message
+      replace all "&7" with "" in message
+      replace all "&8" with "" in message
+      replace all "&9" with "" in message
+      replace all "&0" with "" in message
+      replace all "&a" with "" in message
+      replace all "&b" with "" in message
+      replace all "&c" with "" in message
+      replace all "&d" with "" in message
+      replace all "&e" with "" in message
+      replace all "&k" with "" in message
+      replace all "&l" with "" in message
+      replace all "&m" with "" in message
+      replace all "&n" with "" in message
+      replace all "&o" with "" in message
+      replace all "&r" with "" in message
+      send "%{_d}% %player%&7: &7%message%" to all players
+      stop
+  else:
+    if {_r} is set:
+      send "%{_r}% %player%&f: &f%message%" to all players
+      stop
+    else:
+      replace all "&1" with "" in message
+      replace all "&2" with "" in message
+      replace all "&3" with "" in message
+      replace all "&4" with "" in message
+      replace all "&5" with "" in message
+      replace all "&6" with "" in message
+      replace all "&7" with "" in message
+      replace all "&8" with "" in message
+      replace all "&9" with "" in message
+      replace all "&0" with "" in message
+      replace all "&a" with "" in message
+      replace all "&b" with "" in message
+      replace all "&c" with "" in message
+      replace all "&d" with "" in message
+      replace all "&e" with "" in message
+      replace all "&k" with "" in message
+      replace all "&l" with "" in message
+      replace all "&m" with "" in message
+      replace all "&n" with "" in message
+      replace all "&o" with "" in message
+      replace all "&r" with "" in message
+      send "&e%player%&7: &7%message%" to all players
+      stop
+
+command /title <player> [<text>]:
+  trigger:
+    if arg-2 is set:
+      set {title::%arg-1%} to arg-2
+    else:
+      delete {title::%arg-1%}

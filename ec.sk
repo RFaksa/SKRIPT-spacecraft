@@ -1,0 +1,61 @@
+command /stash [<number>]:
+  trigger:
+    play sound "block.barrel.open" with volume 2 to the player
+    if arg-1 > 9:
+      stop
+    if arg-1 < 1:
+      stop
+    if arg-1 is not set:
+      set {_a} to 1
+    else:
+      set {_a} to arg-1
+    set {_gui} to a new chest inventory with 6 rows named "&a%player%’s stash &2[%{_a}%]"
+    set {_slot} to 0
+    loop 36 times:
+      set slot {_slot} of {_gui} to {stash::%{_a}%::%{_slot}%::%player%}
+      log "LOAD: %{_a}%::%{_slot}%::%{stash::%{_a}%::%{_slot}%::%player%}%" to "Logs/stash_%player%"
+      add 1 to {_slot}
+    loop 18 times:
+      set slot {_slot} of {_gui} to purple stained glass pane named " "
+      add 1 to {_slot}
+    if {_a} is not 1:
+      set slot 46 of {_gui} to green stained glass pane named "back"
+    if {_a} is not 9:
+      set slot 52 of {_gui} to green stained glass pane named "next"
+    close inventory of player
+    open {_gui} to player
+    stop
+
+on inventory click:
+  if inventory name of player's current inventory contains "&a%player%’s stash &2[":
+    if clicked slot is purple stained glass pane:
+      cancel event
+    if clicked slot is 46 or 52:
+      if clicked slot is green stained glass pane named "next":
+        cancel event
+        set {_d} to name of player's current inventory
+        replace all "&a%player%’s stash &2[" with "" in {_d}
+        replace all "]" with "" in {_d}
+        set {_d} to "%{_d}%" parsed as number
+        make player execute command "/stash %({_d}+1)%"
+    if clicked slot is green stained glass pane named "back":
+      cancel event
+      set {_d} to name of player's current inventory
+      replace all "&a%player%’s stash &2[" with "" in {_d}
+      replace all "]" with "" in {_d}
+      set {_d} to "%{_d}%" parsed as number
+      make player execute command "/stash %({_d}-1)%"
+
+on inventory close:
+  if inventory name of player's current inventory contains "&a%player%’s stash &2[":
+    play sound "block.barrel.close" with volume 2 to the player
+    set {_d} to name of player's current inventory
+    replace all "&a%player%’s stash &2[" with "" in {_d}
+    replace all "]" with "" in {_d}
+    set {_slot} to 0
+    loop 54 times:
+      set {stash::%{_d}%::%{_slot}%::%player%} to slot {_slot} of player's current inventory
+      if {stash::%{_d}%::%{_slot}%::%player%} is {menubook} named "&d&l%player%’s menu":
+        delete {stash::%{_d}%::%{_slot}%::%player%}
+      log "UNLOAD: %{_d}%::%{_slot}%::%{stash::%{_d}%::%{_slot}%::%player%}%" to "Logs/stash_%player%"
+      add 1 to {_slot}

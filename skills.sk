@@ -1,0 +1,324 @@
+#vyresit unbreakable itemy na mobky
+on load:
+
+  set {mobs.1.tool} to gold sword named "1" with nbt "{Unbreakable:1b}" #most important setting mobs id
+  set {mobs.1.mob} to "zombie"
+  set {mobs.1.name} to "&6&lGold Horder"
+  set {mobs.1.hp} to 300 #hearts
+  set {mobs.1.maxhp} to 300 #hearts
+  set {mobs.1.equip1} to gold block with nbt "{Unbreakable:1}"
+  set {mobs.1.equip2} to gold chestplate with nbt "{Unbreakable:1}"
+  set {mobs.1.equip3} to gold leggings with nbt "{Unbreakable:1}"
+  set {mobs.1.equip4} to gold boots with nbt "{Unbreakable:1}"
+  set {mobs.1.skill.chance} to 50%
+  set {mobs.1.defence} to 1
+  set {mobs.1.dodgechance} to 50%
+  set {mobs.1.drop::1} to diamond named "&eak cast 1"
+  set {mobs.1.drop.chance.1} to 100%
+  set {mobs.1.drop::2} to Diamond named "&eak cast 2"
+  set {mobs.1.drop.chance.2} to 20%
+  set {mobs.1.drop::3} to iron ingot named "&eak cast 3"
+  set {mobs.1.drop.chance.3} to 5%
+  set {mobs.1.drop::4} to diamond hoe named "AK-47" with lore "&cDamage: 60" and "&eRange: 23" and "&6Reload time: 0.1"
+  set {mobs.1.drop.chance.4} to 0.1%
+
+  set {mobs.2.tool} to diamond sword named "2" with nbt "{Unbreakable:1b}"
+  set {mobs.2.mob} to "skeleton"
+  set {mobs.2.name} to "&b&lDiamond Horder"
+  set {mobs.2.hp} to 3000000 #hearts
+  set {mobs.2.maxhp} to 3000000 #hearts
+  set {mobs.2.equip1} to diamond block with nbt "{Unbreakable:1b}"
+  set {mobs.2.equip2} to diamond chestplate with nbt "{Unbreakable:1b}"
+  set {mobs.2.equip3} to diamond leggings with nbt "{Unbreakable:1b}"
+  set {mobs.2.equip4} to diamond boots with nbt "{Unbreakable:1b}"
+  set {mobs.2.defence} to 0.001
+  set {mobs.2.dodgechance} to 15%
+  
+  set {mobs.3.tool} to unbreakable Iron Block named "3"
+  set {mobs.3.mob} to "enderman"
+  set {mobs.3.name} to "&5&lZZZZ"
+  set {mobs.3.hp} to 3000 #hearts
+  set {mobs.3.maxhp} to 3000 #hearts
+  set {mobs.3.equip1} to diamond block with nbt "{Unbreakable:1b}"
+  set {mobs.3.equip2} to diamond chestplate with nbt "{Unbreakable:1b}"
+  set {mobs.3.equip3} to diamond leggings with nbt "{Unbreakable:1b}"
+  set {mobs.3.equip4} to diamond boots with nbt "{Unbreakable:1b}"
+  set {mobs.3.defence} to 0.01
+  set {mobs.3.dodgechance} to 15%
+
+
+command /mob <text>:
+  permission: *.*
+  trigger:
+    if arg-1 is set:
+      if {mobs.%arg-1%.mob} is "zombie":
+        spawn adult zombie at player
+      if {mobs.%arg-1%.mob} is "skeleton":
+        spawn skeleton at player
+      if {mobs.%arg-1%.mob} is "enderman":
+        spawn enderman at player
+      set {_s} to last spawned entity
+      set {_s}'s max health to {mobs.%arg-1%.maxhp}
+      set {_s}'s health to {mobs.%arg-1%.hp}
+      equip {_s} with {mobs.%arg-1%.equip1}
+      equip {_s} with {mobs.%arg-1%.equip2}
+      equip {_s} with {mobs.%arg-1%.equip3}
+      equip {_s} with {mobs.%arg-1%.equip4}
+      set tool of {_s} to {mobs.%arg-1%.tool}
+      set display name of {_s} to {mobs.%arg-1%.name}
+      
+
+on damage:
+  if victim is item frame:
+    stop
+  if victim is player:
+    if attacker is entity:
+      set {_damage} to "%(damage*({strength::%attacker%}*0.01+1) / (1+{defence::%victim%}*0.01+{defencearmor::%victim%}))%" parsed as number
+      set damage to {_damage}
+  if attacker is player:
+    if {_damage} is not set:
+      set {_g} to name of victim's tool
+      if {mobs.%{_g}%.defence} is not number:
+        if {mobs.%{_g}%.dodgechance} is not number:
+          set {_damage} to damage*({strength::%attacker%}*0.01+1)
+          set damage to {_damage}
+      else:
+        chance of {mobs.%{_g}%.dodgechance}:
+          set damage to 0
+          set {_damage} to "&cDodge"
+        else:
+          set {_damage} to "%((damage*({strength::%attacker%}*0.01+1)) / {mobs.%{_g}%.defence})%" parsed as number
+          set damage to {_damage}
+    spawn an armor stand at location at 1, 1, 1 in world "void"
+    set {_stand} to last spawned armor stand
+    add "{CustomNameVisible:1,Invisible:1,Marker:1b,NoGravity:1b,Small:1,DisabledSlots:2039583}" to nbt of {_stand}
+    if {_damage} is "&cDodge":
+      set {_damage} to "&eDodge" or "&e0" or "&eMiss" or "&eEvade"
+      set name of {_stand} to "%{_damage}%"
+    else:
+      if victim is not player:
+        add  2*{_damage} to {strength.xp::%attacker%}
+        if {strength.xp::%attacker%} >= {strength.xpneed::%attacker%}:
+          set {strength.xpneed::%attacker%} to 1.25*{strength.xpneed::%attacker%}
+          set {strength.xp::%attacker%} to 0
+          add 1 to {strength::%attacker%}
+          add 1 to {strength.pts::%attacker%}
+          send title " " with subtitle "&c&lStrength level increased" to attacker for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          execute console command "/levelupsound %attacker%"
+        set {_damagefinal.%attacker%} to 2*{_damage}
+        add {_damagefinal.%attacker%} to {d.topdmg.%uuid of victim%::%attacker%}
+      set name of {_stand} to "&c%(2*{_damage})%"
+    loop blocks in radius 2 around victim:
+      if loop-block is air:
+        loop blocks between attacker and victim:
+          if loop-block-2 is loop-block-1:
+            add loop-block-2's location to {_locs::*}
+    set {_loc} to random element of {_locs::*}
+    teleport {_stand} to {_loc} 
+    wait 1 second
+    kill {_stand}
+
+on damage:
+  wait 1 tick
+  set {lastdamage.%uuid of attacker%} to now
+  remove bossbar "damage.%uuid of attacker%"
+  set {_health} to health of victim
+  set {_healthmax} to max health of victim
+  set {_healthmaxtot} to {_health} / {_healthmax} * 100
+  if 2*{_healthmax} is more than 1000:
+    if name of victim is not set:
+      create bossbar titled "&c&l%(2*{_health})% &7&l/ &4&l%(2*{_healthmax}/1000)%K" and id "damage.%uuid of attacker%" for attacker with progress {_healthmaxtot} with colors red
+    else:
+      create bossbar titled "&l%name of victim% &f&l- &c&l%(2*{_health})% &7&l/ &4&l%(2*{_healthmax}/1000)%K" and id "damage.%uuid of attacker%" for attacker with progress {_healthmaxtot} with colors red
+  else:
+    if name of victim is not set:
+      create bossbar titled "&c&l%(2*{_health})% &7&l/ &4&l%(2*{_healthmax})%" and id "damage.%uuid of attacker%" for attacker with progress {_healthmaxtot} with colors red
+    else:
+      create bossbar titled "&l%name of victim% &f&l- &c&l%(2*{_health})% &7&l/ &4&l%(2*{_healthmax})%" and id "damage.%uuid of attacker%" for attacker with progress {_healthmaxtot} with colors red
+  wait 4 seconds
+  set {_waited} to difference between {lastdamage.%uuid of attacker%} and now
+  if {_waited} is more than 3.5 seconds:
+    remove bossbar "damage.%uuid of attacker%"
+
+on damage:
+  if victim is player:
+    set {dmgteleport.%victim%} to now
+    wait 5 seconds
+    if difference between {dmgteleport.%victim%} and now is more than 4.5 seconds:
+      delete {dmgteleport.%victim%}
+    else:
+      stop
+
+on join:
+  if {dmgteleport.%player%} is set:
+    delete {dmgteleport.%player%}
+command /levelupsound [<player>]:
+  permission: admin
+  trigger:
+    play sound "block.note_block.harp" with pitch 0.4 to the arg-1
+    wait 0.3 seconds
+    play sound "block.note_block.harp" with pitch 0.9 to the arg-1
+    wait 0.3 seconds
+    play sound "block.note_block.harp" with pitch 1.5 to the arg-1
+on death:
+  clear drops
+  if victim is player:
+    add 1 to {deaths::%victim%}
+    add 1 to {kills::%attacker%}
+  if victim is not player:
+    loop {d.topdmg.%uuid of victim%::*}:
+      set {_n} to size of {d.topdmg.%uuid of victim%::*}
+      set {_topdmgcheck::%loop-index%} to loop-value
+      add 1 to {mobskilled::%loop-index%}
+    set {topdmg.%uuid of victim%::*} to sorted {d.topdmg.%uuid of victim%::*}
+    delete {d.topdmg.%uuid of victim%::*}
+    set {_best} to last element of {topdmg.%uuid of victim%::*}
+    loop {_topdmgcheck::*}:
+      if {_best} = loop-value:
+        set {_bestplayer} to loop-index
+        delete {_topdmgcheck::loop-index}
+        set {_last1} to {_bestplayer}
+    delete {topdmg.%uuid of victim%::%{_n}%}
+    if {topdmg.%uuid of victim%::*} is set:
+      set {_best2} to last element of {topdmg.%uuid of victim%::*}
+      loop {_topdmgcheck::*}:
+        if {_best2} = loop-value:
+          set {_bestplayer2} to loop-index
+          delete {_topdmgcheck::loop-index}
+          if {_bestplayer} = {_bestplayer2}:
+            set {_bestplayer} to {_last1}
+          set {_last2} to {_bestplayer2}
+      delete {topdmg.%uuid of victim%::%({_n}-1)%}
+    if {topdmg.%uuid of victim%::*} is set:
+      set {_best3} to last element of {topdmg.%uuid of victim%::*}
+      loop {_topdmgcheck::*}:
+        if {_best3} = loop-value:
+          set {_bestplayer3} to loop-index
+          delete {_topdmgcheck::loop-index}
+          if {_bestplayer2} = {_bestplayer3}:
+            set {_bestplayer2} to {_last2}
+          set {_last3} to {_bestplayer3}
+      delete {topdmg.%uuid of victim%::%({_n}-1)%}
+    if {_bestplayer} = {_bestplayer3}:
+      set {_bestplayer} to {_last1}
+      set {_bestplayer2} to {_last2}
+      set {_bestplayer3} to {_last3}
+    loop players in radius 15 around victim:
+      if {_bestplayer2} is set:
+        if name of victim is not set:
+          send "&cDefeated boss: &c&l%victim% " to loop-players
+        else:
+          send "&cDefeated boss: &c&l%name of victim% " to loop-players
+        send "&e=================================" to loop-players
+        send "&c1. &5&n%({_bestplayer} parsed as offline player)%&e &e- &d%{_best}%" to loop-players
+        send "&c2. &3%({_bestplayer2} parsed as offline player)% &e- &b%{_best2}%" to loop-players
+      if {_bestplayer3} is set:
+        send "&c3. &2%({_bestplayer3} parsed as offline player)% &e- &a%{_best3}%" to loop-players
+      if {_bestplayer2} is set:
+        send "&e=================================" to loop-players
+    set {_g} to name of victim's tool
+    loop {mobs.%{_g}%.drop::*}:
+      chance of {mobs.%{_g}%.drop.chance.%loop-index%}:
+        give loop-value to {_bestplayer} parsed as player
+      chance of (0.67*{mobs.%{_g}%.drop.chance.%loop-index%}):
+        give loop-value to {_bestplayer2} parsed as player
+      chance of (0.33*{mobs.%{_g}%.drop.chance.%loop-index%}):
+        give loop-value to {_bestplayer3} parsed as player
+      loop {topdmg.%uuid of victim%::*}:
+        chance of (0.1*{mobs.%{_g}%.drop.chance.%loop-index-1%}):
+          give loop-value-2 to loop-index-2 parsed as player
+    delete {topdmg.%uuid of victim%::*}
+  else:
+    if victim's max health > 4:
+      subtract 2 from the victim's max health
+      wait 2 minutes
+      add 2 to the victim's max health
+on join:
+  if player's max health < 10:
+    set player's max health to 10
+
+
+on hunger meter change:
+  cancel event
+
+on right click:
+  if player is holding diamond hoe:
+    if targeted entity is armor stand:
+      stop
+    set {_time} to the 3rd line of the lore of the player's tool
+    replace all "&6Reload time: " with "" in {_time}
+    set {_time} to {_time} parsed as timespan
+    if difference between {ShootCD::%player%} and now is more than {_time}:
+      set {ShootCD::%player%} to now
+    else:
+      if difference between {ShootCD::%player%} and now is less than {_time}:
+        stop
+    if {ShootCD::%player%} is not set:
+      set {ShootCD::%player%} to now
+    set {_time} to "%({_time}/10)% seconds" parsed as timespan
+    set {_x} to targeted entity
+    add 1 to {_x}'s y-coordinate
+    set {_y} to player
+    add 1 to {_y}'s y-coordinate
+    set {_range} to the 2nd line of the lore of the player's tool
+    replace all "&eRange: " with "" in {_range}
+    set {_range} to {_range} parsed as number
+    set {_color} to the 4th line of the lore of the player's tool
+    replace all "&bColor: " with "" in {_color}
+    if {_range} is not set:
+      stop
+    if {_x} is not set:
+      if target block is not set:
+        stop
+      if distance between player and target block is more than {_range}:
+        stop
+      if {_color} contains "red":
+        drawLine particle redstone, RGB 255, 0, 0, center player, target location of target block, id "%player%", rainbowMode true, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 1.2, 0, pulseDelay 1
+      else:
+        if {_color} contains "blue":
+          drawLine particle redstone, RGB 0, 0, 255, center player, target location of target block, id "%player%", rainbowMode true, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 1.2, 0, pulseDelay 1
+        else:
+          if {_color} contains "green":
+            drawLine particle redstone, RGB 0, 255, 0, center player, target location of target block, id "%player%", rainbowMode true, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 1.2, 0, pulseDelay 1  
+          else:
+            if {_color} contains "purple":
+              drawLine particle redstone, RGB 153, 0, 76, center player, target location of target block, id "%player%", rainbowMode true, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 1.2, 0, pulseDelay 1 
+            else:
+              drawLine particle redstone, RGB 0, 0, 0, center player, target location of target block, id "%player%", rainbowMode true, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 1.2, 0, pulseDelay 1
+    if {_x} is set:
+      if distance between {_y} and {_x} is more than {_range}:
+        stop
+      set {_dmg} to the 1st line of the lore of the player's tool
+      replace all "&cDamage: " with "" in {_dmg}
+      set {_dmg} to {_dmg} parsed as number
+      make player damage target entity by {_dmg}
+      drawLine particle redstone, RGB 0, 0, 0, center {_y}, target {_x}, id "%player%", rainbowMode false, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 0, 0, pulseDelay 1
+    send action bar "&4[&cI&7IIIIIIIII&4]" to player
+    wait {_time}
+    send action bar "&4[&cII&7IIIIIIII&4]" to player
+    wait {_time}
+    send action bar "&4[&cIII&7IIIIIII&4]" to player
+    wait {_time}
+    send action bar "&4[&cIIII&7IIIIII&4]" to player
+    wait {_time}
+    send action bar "&4[&cIIIII&7IIIII&4]" to player
+    wait {_time}
+    send action bar "&4[&cIIIIII&7IIII&4]" to player
+    wait {_time}
+    send action bar "&4[&cIIIIIII&7III&4]" to player
+    wait {_time}
+    send action bar "&4[&cIIIIIIII&7II&4]" to player
+    wait {_time}
+    send action bar "&4[&cIIIIIIIII&7I&4]" to player
+    wait {_time}
+    send action bar "&4[&cIIIIIIIIII&4]" to player
+    wait {_time}
+    send action bar "&4[&c-&4&lREADY&c-&4]" to player
+
+on death:
+  force victim to respawn
+  wait 1 tick
+  set {_ship.respawn.location.X::%victim%} to ({ship.location.X::%victim%}-2.5)
+  set {_ship.respawn.location.Z::%victim%} to ({ship.location.Z::%victim%}-3.5)
+  teleport victim to location at {_ship.respawn.location.X::%victim%}, 62, {_ship.respawn.location.Z::%victim%}
+  apply blindness 3 to victim for 15 seconds

@@ -1,0 +1,22 @@
+on drop:
+  send "&cYou can not throw things like that! You should use &4/trash" to player
+  cancel event
+
+command /trash:
+  trigger:
+    set {_gui} to a new chest inventory with 4 rows named "§4§lTrash"
+    open {_gui} to player
+
+on item spawn:
+  set {_i} to event-entity
+  set glowing of {_i} to true
+
+on weather change to rain or thunder:
+  cancel event
+
+
+
+
+
+
+

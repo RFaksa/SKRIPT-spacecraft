@@ -1,0 +1,35 @@
+options:
+  1: 250
+on rightclick on entity:
+  set {_n} to name of event-entity
+  if {_n} is "&cBartender":
+    send "&cBartender&f: some message" to player
+    wait 1 second
+    send "&cBartender&f: some message" to player
+    wait 1 second
+    set {_gui} to a new chest inventory with 1 row named "§c§lBartender"
+    loop 9 times:
+      set slot {_gui.slot} of {_gui} to light gray stained glass pane named " "
+      add 1 to {_gui.slot}
+    if {age::%player%} > 18:
+      set slot 2 of {_gui} to redstone named "&cRemove friend" with lore " " and "&2Click to open unfriend menu"
+      set slot 4 of {_gui} to paper named "&bFriend list" with lore " " and "&2Click to see full friend list"
+      set slot 6 of {_gui} to diamond named "&aAdd friend" with lore " " and "&eClick to add friend" and "&8(You have to write" and "&8his name to chat)"
+    else:
+      set slot 4 of {_gui} to milk named "&f&lMilk" with lore " " and "&fJust for kids like you are!" and " " and "&6Price: {@1}$"
+    close inventory of player
+    open {_gui} to player
+    stop
+
+on inventory click:
+  if event-inventory's name contains "§c§lBartender":
+    cancel event
+    if clicked slot is 4:
+      if {age::%player%} > 18:
+        give 1 bottle to player
+      else:
+        give 1 milk named "&f&lMilk" with lore " " and "&fJust for kids like you are!" to player
+
+on damage:
+  if name of victim is "&cBartender":
+    cancel event

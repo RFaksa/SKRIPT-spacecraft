@@ -1,0 +1,132 @@
+command /friend [<text>] [<player>]:
+  aliases: /friends, /f
+  trigger:
+    if arg-1 is not set:
+      set {_gui} to a new chest inventory with 3 rows named "§a§lFriends"
+      set {_gui.slot} to 0
+      loop 27 times:
+        set slot {_gui.slot} of {_gui} to light gray stained glass pane named " "
+        add 1 to {_gui.slot}
+      set slot 13 of {_gui} to redstone named "&cRemove friend" with lore " " and "&2Click to open unfriend menu"
+      set slot 15 of {_gui} to paper named "&bFriend list" with lore " " and "&2Click to see full friend list"
+      set slot 11 of {_gui} to diamond named "&aAdd friend" with lore " " and "&eClick to add friend" and "&8(You have to write" and "&8his name to chat)"
+      open {_gui} to player
+      stop
+
+command /friendadd:
+  trigger:
+    if {friend.add::%{friend.add::%player%}%} is set:
+      if {friend.add::%{friend.add::%player%}%} is not 1:
+        if {friend.add::%player%} = "%player%":
+          send "&cDon't you have friends that you want to be friends with yourself?" to player
+          delete {friend.add::%player%}
+          stop
+        loop {friend.list::%player%::*}:
+          if loop-value is "%{friend.add::%player%}%":
+            send "&cYou are already friends with &4%{friend.add::%player%}%"
+            delete {friend.add::%player%}
+            stop
+        if {friend.count::%player%} is not set:
+          set {friend.count::%{friend.add::%player%}%} to 0
+        else:
+          add 1 to {friend.count::%{friend.add::%player%}%}
+        if {friend.count::%player%} is not set:
+          set {friend.count::%player%} to 0
+        else:
+          add 1 to {friend.count::%player%}
+        set {friend.list::%player%::%{friend.count::%player%}%} to "%{friend.add::%player%}%" parsed as player
+        set {friend.list::%{friend.add::%player%}%::%{friend.count::%{friend.add::%player%}%}%} to "%player%" parsed as player
+        send "&a%player% accepted your friend request" to {friend.add::%player%}
+        send "&aYou accepted friend request from %{friend.add::%player%}%" to player
+        stop
+
+on inventory click:
+  if event-inventory's name contains "§a§lFriend list":
+    cancel event
+  if event-inventory's name contains "§a§lFriends":
+    cancel event
+    if clicked slot is 11:
+      close player's inventory
+      send "&aType the name of the player you want to send a friend request to." to player
+      set {friend.add::%player%} to 1
+    if clicked slot is 15:
+      close player's inventory
+      set {_gui} to a new chest inventory with 6 rows named "§a§lFriend list"
+      set {_gui.slot} to 0
+      set {_list} to 0
+      loop 54 times:
+        loop {friend.list::%player%::*}:
+          if loop-value-1 is not set:
+            if loop-index is not set:
+              open {_gui} to player
+              stop
+            add 1 to {_list}
+          else:
+            set slot {_gui.slot} of {_gui} to skull of ("%{friend.list::%player%::%{_list}%}%" parsed as an offline player) named "%{friend.list::%player%::%{_list}%}%" with lore " " and "Level: &6%{level::%{friend.list::%player%}%::%{_list}%}%"
+            add 1 to {_list}
+          if slot {_gui.slot} of {_gui} is player head:
+            add 1 to {_gui.slot}
+      loop (54-{_gui.slot}) times:
+        set slot {_gui.slot} of {_gui} to light gray stained glass pane named " "
+        add 1 to {_gui.slot}
+      open {_gui} to player
+      stop
+    if clicked slot is 13:
+      close player's inventory
+      set {_gui} to a new chest inventory with 6 rows named "§c§lUnfriend menu"
+      set {_gui.slot} to 0
+      set {_list} to 0
+      loop 54 times:
+        loop {friend.list::%player%::*}:
+          if loop-value-1 is not set:
+            if loop-index is not set:
+              open {_gui.slot} to player
+              stop
+            add 1 to {_list}
+          else:
+            set slot {_gui.slot} of {_gui} to skull of ("%{friend.list::%player%::%{_list}%}%" parsed as an offline player) named "&6&l%{friend.list::%player%::%{_list}%}%" with lore " " and "Level: &6%{level::%{friend.list::%player%}%::%{_list}%}%"
+            add 1 to {_list}
+          if slot {_gui.slot} of {_gui} is player head:
+            add 1 to {_gui.slot}
+      loop (54-{_gui.slot}) times:
+        set slot {_gui.slot} of {_gui} to light gray stained glass pane named " "
+        add 1 to {_gui.slot}
+      open {_gui} to player
+      stop
+  if event-inventory's name contains "§c§lUnfriend menu":
+    cancel event
+    name of clicked item is not set:
+      stop
+    name of clicked item is " ":
+      stop
+    clicked item is not player head:
+      stop
+    clicked item is player head:
+      loop {friend.list::%player%::*}:
+        if name of clicked item is "&6&l%loop-value%":
+          set {name::%player%} to name of clicked item
+          set {_gui} to a new chest inventory with 1 rows named "§c§lUnfriend &4&l%{name::%player%}%"
+          set {_gui.slot} to 0
+          loop 9 times:
+            set slot {_gui.slot} of {_gui} to light gray stained glass pane named " "
+            add 1 to {_gui.slot}
+          set slot 3 of {_gui} to lime concrete named "&2&lYes delete friend"
+          set slot 5 of {_gui} to red concrete named "&c&lCancel"
+          open {_gui} to player
+          stop
+  if event-inventory's name contains "§c§lUnfriend &4&l":
+    if clicked slot is 3:
+      replace all "&6" and "&l" with "" in {name::%player%}
+      loop {friend.list::%player%::*}:
+        if loop-value is "%{name::%player%}%":
+          delete {friend.list::%player%::%loop-index%}
+          loop {friend.list::%{name::%player%}%::*}:
+            if loop-value-2 is "%player%":
+              delete {friend.list::%{name::%player%}%::%loop-index-2%}
+      close player's inventory
+      send "&4%{name::%player%}% &chas been removed from friend list" to player
+      send "&4%player% &chas been removed from friend list" to {name::%player%}
+      delete {name::%player%}
+    if clicked slot is 5:
+      close player's inventory
+      stop
