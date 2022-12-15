@@ -1,0 +1,230 @@
+on load:
+  set {crafting.1.1::item} to kelp with lore "&lmiluju pera" and "1" and "1" and "1"
+  set {crafting.1.1::name} to "&aBio fuel"
+  set {crafting.1.1::lorenumber} to 1
+  set {crafting.1.1::number.1} to 1
+  set {crafting.1.1::material.1.i} to rose bush
+  set {crafting.1.1::material.1} to "&aClimbing rose bush"
+
+  set {crafting.1.2::item} to iron ingot
+  set {crafting.1.2::name} to "&eparek"
+  set {crafting.1.2::lorenumber} to 2
+  set {crafting.1.2::number.1} to 1
+  set {crafting.1.2::material.1.i} to rose bush
+  set {crafting.1.2::material.1} to "&aClimbing rose bush"
+  set {crafting.1.2::number.2} to 5
+  set {crafting.1.2::material.2.i} to dried kelp
+  set {crafting.1.2::material.2} to "&eRocket fuel"
+  
+  set {crafting.1.3::item} to diamond helmet
+  set {crafting.1.3::name} to "&ehelmet"
+  set {crafting.1.3::lorenumber} to 1
+  set {crafting.1.3::number.1} to 1
+  set {crafting.1.3::material.1.i} to iron ingot
+  set {crafting.1.3::material.1} to "&eparek"
+
+  set {crafting.1.4::item} to diamond hoe named "&eAK-47" with lore "&cDamage: 60" and "&eRange: 23" and "&6Reload time: 0.1"
+  set {crafting.1.4::name} to "&eAK-47"
+  set {crafting.1.4::lorenumber} to 3
+  set {crafting.1.4::number.1} to 5
+  set {crafting.1.4::material.1.i} to diamond
+  set {crafting.1.4::material.1} to "&eak cast 1"
+  set {crafting.1.4::number.2} to 2
+  set {crafting.1.4::material.2.i} to diamond
+  set {crafting.1.4::material.2} to "&eak cast 2"
+  set {crafting.1.4::number.3} to 1
+  set {crafting.1.4::material.3.i} to iron ingot
+  set {crafting.1.4::material.3} to "&eak cast 3"
+
+  set {crafting.1.5::item} to diamond hoe named "&4Cocopindus 3000" with lore "&cDamage: 60" and "&eRange: 23" and "&6Reload time: 0.1" and "&aColor: &4purple"
+  set {crafting.1.5::name} to "&4Cocopindus 3000"
+  set {crafting.1.5::lorenumber} to 1
+  set {crafting.1.5::number.1} to 1
+  set {crafting.1.5::material.1.i} to rose bush
+  set {crafting.1.5::material.1} to "&aClimbing rose bush"
+
+  set {crafting.1.6::item} to diamond hoe named "&dCocopindus 4000" with lore "&cDamage: 60" and "&eRange: 23" and "&6Reload time: 0.1" and "&aColor: &5blue"
+  set {crafting.1.6::name} to "&dCocopindus 3000"
+  set {crafting.1.6::lorenumber} to 1
+  set {crafting.1.6::number.1} to 1
+  set {crafting.1.6::material.1.i} to rose bush
+  set {crafting.1.6::material.1} to "&aClimbing rose bush"
+
+  set {crafting.2.1::item} to kelp with lore "&lmiluju pera" and "0" and "1" and "1"
+  set {crafting.2.1::name} to "&aBio fuel"
+  set {crafting.2.1::lorenumber} to 1
+  set {crafting.2.1::number.1} to 5
+  set {crafting.2.1::material.1.i} to rose bush
+  set {crafting.2.1::material.1} to "&aClimbing rose bush"
+
+  set {crafting.2.2::item} to diamond sword named "&epindourove valky" with lore "&cDamage: 60" and "&eRange: 23" and "&6Reload time: 0.1"
+  set {crafting.2.2::name} to "&epindourove valky"
+  set {crafting.2.2::lorenumber} to 2
+  set {crafting.2.2::number.1} to 5
+  set {crafting.2.2::material.1.i} to diamond
+  set {crafting.2.2::material.1} to "&eak cast 1"
+  set {crafting.2.2::number.2} to 2
+  set {crafting.2.2::material.2.i} to diamond
+  set {crafting.2.2::material.2} to "&eak cast 2"
+
+command /craft [<num>]:
+  aliases: /c, /crafting
+  trigger:
+    if player doesn't have permission "vip":
+      if player is not in world "void":
+        close inventory of player
+        send "&cYou need premium rank for this action!" to player
+        stop
+    if arg-1 is not set:
+      set {_gui} to a new chest inventory with 3 rows named "§e§lWorkbench menu"
+      set {_gui.slot} to 0
+      loop 27 times:
+        set slot {_gui.slot} of {_gui} to orange stained glass pane named " "
+        add 1 to {_gui.slot}
+      set slot 10 of {_gui} to white stained glass pane named "&7&n1"
+      set slot 11 of {_gui} to white stained glass pane named "&7&n2"
+      set slot 12 of {_gui} to white stained glass pane named "&7&n3"
+      set slot 14 of {_gui} to white stained glass pane named "&7&n4"
+      set slot 15 of {_gui} to white stained glass pane named "&7&n5"
+      set slot 16 of {_gui} to white stained glass pane named "&7&n3"
+      close inventory of player
+      open {_gui} to player
+      stop
+    else:
+      set {_gui} to a new chest inventory with 5 rows named "§6§lWorkbench %arg-1%"
+      set {_gui.slot} to 0
+      loop 45 times:
+        set slot {_gui.slot} of {_gui} to orange stained glass pane named " "
+        add 1 to {_gui.slot}
+      set {_gui.slot} to 10
+      set {_n} to 1
+      loop 7 times:
+        if {crafting.%arg-1%.%{_n}%::item} is set:
+          if {crafting.%arg-1%.%{_n}%::lorenumber} is 1:
+            set slot {_gui.slot} of {_gui} to {crafting.%arg-1%.%{_n}%::item} named "%{crafting.%arg-1%.%{_n}%::name}%" with lore "&eCrafting materials:" and "&6%{crafting.%arg-1%.%{_n}%::number.1}%x %{crafting.%arg-1%.%{_n}%::material.1}%"
+          if {crafting.%arg-1%.%{_n}%::lorenumber} is 2:
+            set slot {_gui.slot} of {_gui} to {crafting.%arg-1%.%{_n}%::item} named "%{crafting.%arg-1%.%{_n}%::name}%" with lore "&eCrafting materials:" and "&6%{crafting.%arg-1%.%{_n}%::number.1}%x %{crafting.%arg-1%.%{_n}%::material.1}%" and "&6%{crafting.%arg-1%.%{_n}%::number.2}%x %{crafting.%arg-1%.%{_n}%::material.2}%"
+          if {crafting.%arg-1%.%{_n}%::lorenumber} is 3:
+            set slot {_gui.slot} of {_gui} to {crafting.%arg-1%.%{_n}%::item} named "%{crafting.%arg-1%.%{_n}%::name}%" with lore "&eCrafting materials:" and "&6%{crafting.%arg-1%.%{_n}%::number.1}%x %{crafting.%arg-1%.%{_n}%::material.1}%" and "&6%{crafting.%arg-1%.%{_n}%::number.2}%x %{crafting.%arg-1%.%{_n}%::material.2}%" and "&6%{crafting.%arg-1%.%{_n}%::number.3}%x %{crafting.%arg-1%.%{_n}%::material.3}%"
+          if {crafting.%arg-1%.%{_n}%::lorenumber} is 4:
+            set slot {_gui.slot} of {_gui} to {crafting.%arg-1%.%{_n}%::item} named "%{crafting.%arg-1%.%{_n}%::name}%" with lore "&eCrafting materials:" and "&6%{crafting.%arg-1%.%{_n}%::number.1}%x %{crafting.%arg-1%.%{_n}%::material.1}%" and "&6%{crafting.%arg-1%.%{_n}%::number.2}%x %{crafting.%arg-1%.%{_n}%::material.2}%" and "&6%{crafting.%arg-1%.%{_n}%::number.3}%x %{crafting.%arg-1%.%{_n}%::material.3}%" and "&6%{crafting.%arg-1%.%{_n}%::number.4}%x %{crafting.%arg-1%.%{_n}%::material.4}%"
+          if {crafting.%arg-1%.%{_n}%::lorenumber} is 5:
+            set slot {_gui.slot} of {_gui} to {crafting.%arg-1%.%{_n}%::item} named "%{crafting.%arg-1%.%{_n}%::name}%" with lore "&eCrafting materials:" and "&6%{crafting.%arg-1%.%{_n}%::number.1}%x %{crafting.%arg-1%.%{_n}%::material.1}%" and "&6%{crafting.%arg-1%.%{_n}%::number.2}%x %{crafting.%arg-1%.%{_n}%::material.2}%" and "&6%{crafting.%arg-1%.%{_n}%::number.3}%x %{crafting.%arg-1%.%{_n}%::material.3}%" and "&6%{crafting.%arg-1%.%{_n}%::number.4}%x %{crafting.%arg-1%.%{_n}%::material.4}%" and "&6%{crafting.%arg-1%.%{_n}%::number.5}%x %{crafting.%arg-1%.%{_n}%::material.5}%"
+          if {crafting::%arg-1%.%player%::%{_n}%} is not set:
+            set slot {_gui.slot} of {_gui} to red stained glass pane named "&c&nNot learned yet"
+        else:
+          set slot {_gui.slot} of {_gui} to white stained glass pane named "&7&nComming soon"
+        add 1 to {_gui.slot}
+        add 1 to {_n}
+      set {_gui.slot} to 19
+      loop 7 times:
+        set slot {_gui.slot} of {_gui} to white stained glass pane named "&7&nComming soon"
+        add 1 to {_gui.slot}
+      set {_gui.slot} to 28
+      loop 7 times:
+        set slot {_gui.slot} of {_gui} to white stained glass pane named "&7&nComming soon"
+        add 1 to {_gui.slot}
+      close inventory of player
+      open {_gui} to player
+      stop
+
+command /learncraft <player> <num> <num>:
+  permission: admin
+  trigger:
+    set {crafting::%arg-3%.%arg-1%::%arg-2%} to 1
+    send title "&a&l+knowledge" with subtitle "&eLeaned: %{crafting.%arg-3%.%arg-2%::name}%" to arg-1 for 5 seconds
+    play sound "item.totem.use" with volume 2 to the arg-1
+
+on inventory click:
+  if event-inventory's name contains "§e§lWorkbench menu":
+    cancel event
+    if clicked slot is 10:
+      make player execute command "/craft 1"
+    if clicked slot is 11:
+      make player execute command "/craft 2"
+    if clicked slot is 12:
+      make player execute command "/craft 3"
+    if clicked slot is 14:
+      make player execute command "/craft 4"
+    if clicked slot is 15:
+      make player execute command "/craft 5"
+    if clicked slot is 16:
+      make player execute command "/craft 6"
+    stop
+  if event-inventory's name contains "§6§lWorkbench":
+    set {_d3} to event-inventory's name
+    replace all "§6§lWorkbench " with "" in {_d3}
+    set {_d3} to "%{_d3}%" parsed as number
+    cancel event
+    set {_n} to 1
+    loop 49 times:
+      if name of clicked item is {crafting.%{_d3}%.%{_n}%::name}:
+        set {_a} to 1
+        exit loop
+      else:
+        add 1 to {_n}
+    if {_a} is set:
+      loop all items in player's inventory:
+        if name of loop-item contains {crafting.%{_d3}%.%{_n}%::material.1}:
+          if item amount of loop-item >= {crafting.%{_d3}%.%{_n}%::number.1}:
+            set {_a1} to 1
+            if {crafting.%{_d3}%.%{_n}%::lorenumber} >= 2:
+              set {_aa} to 1
+        if name of loop-item contains {crafting.%{_d3}%.%{_n}%::material.2}:
+          if item amount of loop-item >= {crafting.%{_d3}%.%{_n}%::number.2}:
+            set {_a2} to 1
+            if {crafting.%{_d3}%.%{_n}%::lorenumber} >= 3:
+              set {_ab} to 1
+        if name of loop-item contains {crafting.%{_d3}%.%{_n}%::material.3}:
+          if item amount of loop-item >= {crafting.%{_d3}%.%{_n}%::number.3}:
+            set {_a3} to 1
+            if {crafting.%{_d3}%.%{_n}%::lorenumber} >= 4:
+              set {_ac} to 1
+        if name of loop-item contains {crafting.%{_d3}%.%{_n}%::material.4}:
+          if item amount of loop-item >= {crafting.%{_d3}%.%{_n}%::number.4}:
+            set {_a4} to 1
+            if {crafting.%{_d3}%.%{_n}%::lorenumber} >= 5:
+              set {_ad} to 1
+        if name of loop-item contains {crafting.%{_d3}%.%{_n}%::material.5}:
+          if item amount of loop-item >= {crafting.%{_d3}%.%{_n}%::number.5}:
+            set {_a5} to 1
+      if {_a1} is set:
+        if {_aa} is set:
+          if {_a2} is set:
+            if {_ab} is set:
+              if {_a3} is set:
+                if {_ac} is set:
+                  if {_a4} is set:
+                    if {_ad} is set:
+                      if {_a5} is set:
+                        set {_xc} to 1
+                        loop {crafting.%{_d3}%.%{_n}%::lorenumber} times:
+                          remove {crafting.%{_d3}%.%{_n}%::number.%{_xc}%} of {crafting.%{_d3}%.%{_n}%::material.%{_xc}%.i} named "%{crafting.%{_d3}%.%{_n}%::material.%{_xc}%}%" from player
+                          add 1 to {_xc}
+                        give {crafting.%{_d3}%.%{_n}%::item} named "%{crafting.%{_d3}%.%{_n}%::name}%" to player
+                    else:
+                      set {_xc} to 1
+                      loop {crafting.%{_d3}%.%{_n}%::lorenumber} times:
+                        remove {crafting.%{_d3}%.%{_n}%::number.%{_xc}%} of {crafting.%{_d3}%.%{_n}%::material.%{_xc}%.i} named "%{crafting.%{_d3}%.%{_n}%::material.%{_xc}%}%" from player
+                        add 1 to {_xc}
+                      give {crafting.%{_d3}%.%{_n}%::item} named "%{crafting.%{_d3}%.%{_n}%::name}%" to player
+                else:
+                  set {_xc} to 1
+                  loop {crafting.%{_d3}%.%{_n}%::lorenumber} times:
+                    remove {crafting.%{_d3}%.%{_n}%::number.%{_xc}%} of {crafting.%{_d3}%.%{_n}%::material.%{_xc}%.i} named "%{crafting.%{_d3}%.%{_n}%::material.%{_xc}%}%" from player
+                    add 1 to {_xc}
+                  give {crafting.%{_d3}%.%{_n}%::item} named "%{crafting.%{_d3}%.%{_n}%::name}%" to player
+            else:
+              set {_xc} to 1
+              loop {crafting.%{_d3}%.%{_n}%::lorenumber} times:
+                remove {crafting.%{_d3}%.%{_n}%::number.%{_xc}%} of {crafting.%{_d3}%.%{_n}%::material.%{_xc}%.i} named "%{crafting.%{_d3}%.%{_n}%::material.%{_xc}%}%" from player
+                add 1 to {_xc}
+              give {crafting.%{_d3}%.%{_n}%::item} named "%{crafting.%{_d3}%.%{_n}%::name}%" to player
+        else:
+          set {_xc} to 1
+          loop {crafting.%{_d3}%.%{_n}%::lorenumber} times:
+            remove {crafting.%{_d3}%.%{_n}%::number.%{_xc}%} of {crafting.%{_d3}%.%{_n}%::material.%{_xc}%.i} named "%{crafting.%{_d3}%.%{_n}%::material.%{_xc}%}%" from player
+            add 1 to {_xc}
+          give {crafting.%{_d3}%.%{_n}%::item} named "%{crafting.%{_d3}%.%{_n}%::name}%" to player
+
+

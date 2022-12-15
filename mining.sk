@@ -1,0 +1,46 @@
+on rightclick on block of amethyst:
+  if tool of player is pickaxe:
+    set event-block to air
+    play sound "block.amethyst_block.break" with pitch 1 to the player
+    give 1 amethyst shard named "drop" with lore "lol mining" to player
+    add 10 to {defence.xp::%player%}
+    if {defence.xp::%player%} >= {defence.xpneed::%player%}:
+      set {defence.xpneed::%player%} to {defence.xpneed::%player%} + 25
+      set {defence.xp::%player%} to 0
+      add 1 to {defence::%player%}
+      add 1 to {defence.pts::%player%}
+      send title "&a&lDefence level increased" with subtitle "&a&l+ 1 Defence perks point" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+      execute console command "/levelupsound %player%"
+    wait 1 minute
+    set event-block to block of amethyst
+
+on rightclick on wither rose:
+  if tool of player is shears:
+    set event-block to air
+    play sound "entity.sheep.shear" with pitch 1 to the player
+    give 1 wither rose named "drop" with lore "lol gathering" to player
+    add 10 to {defence.xp::%player%}
+    if {defence.xp::%player%} >= {defence.xpneed::%player%}:
+      set {defence.xpneed::%player%} to {defence.xpneed::%player%} + 10
+      set {defence.xp::%player%} to 0
+      add 1 to {defence::%player%}
+      add 1 to {defence.pts::%player%}
+      send title "&a&lDefence level increased" with subtitle "&a&l+ 1 Defence perks point" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+      execute console command "/levelupsound %player%"
+    spawn 1 of armor stand at location at 1, 1, 1 in world "void" with nbt nbt compound from "{CustomNameVisible:1,Invisible:1,Marker:1b,NoGravity:1b,Small:1,DisabledSlots:2039583}"
+    set {_stand} to last spawned armor stand
+    set name of {_stand} to "&cDestroyed!"
+    teleport {_stand} to location of event-block
+    wait 10 seconds
+    set name of {_stand} to "&aGrowing 0%%" 
+    wait 50 seconds
+    set name of {_stand} to "&aGrowing 20%%"
+    wait 1 minute
+    set name of {_stand} to "&aGrowing 40%%"
+    wait 1 minute
+    set name of {_stand} to "&aGrowing 60%%"
+    wait 1 minute
+    set name of {_stand} to "&aGrowing 80%%"
+    wait 1 minute
+    set event-block to wither rose
+    kill {_stand}

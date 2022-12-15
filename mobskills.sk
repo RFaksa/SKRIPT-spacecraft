@@ -1,0 +1,8 @@
+command /mobskill <number> <text>:
+  permission: admin
+  trigger:
+    set {_t} to arg-2 parsed as entity
+    if arg-1 is 1:
+      loop players in radius 5 around {_t}:
+        damage loop-entity by 1
+        

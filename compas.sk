@@ -1,0 +1,234 @@
+on any movement:
+  if round(yaw of player) = 0 or 1 or 360 or 359 or 2 or 358:
+    set {_a} to " SE"
+    set {_b} to "     "
+    set {_c} to "South"
+    set {_d} to "     "
+    set {_e} to "SW "
+  else:
+    if round(yaw of player) = 90 or 91 or 89 or 92 or 88:
+      set {_a} to " SW"
+      set {_b} to "     "
+      set {_c} to "West"
+      set {_d} to "     "
+      set {_e} to "NW "
+    else:
+      if round(yaw of player) = 45 or 46 or 44 or 43 or 47:
+        set {_a} to " S"
+        set {_b} to "     "
+        set {_c} to "Southwest"
+        set {_d} to "     "
+        set {_e} to "W "
+      else:
+        if round(yaw of player) = 135 or 134 or 136 or 137 or 133:
+          set {_a} to " W"
+          set {_b} to "     "
+          set {_c} to "Northwest"
+          set {_d} to "     "
+          set {_e} to "N "
+        else:
+          if round(yaw of player) = 180 or 181 or 182 or 179 or 178:
+            set {_a} to " NW"
+            set {_b} to "     "
+            set {_c} to "North"
+            set {_d} to "     "
+            set {_e} to "NE "
+          else:
+            if round(yaw of player) = 225 or 226 or 227 or 224 or 223:
+              set {_a} to " N"
+              set {_b} to "     "
+              set {_c} to "Northeast"
+              set {_d} to "     "
+              set {_e} to "E "
+            else:
+              if round(yaw of player) = 270 or 271 or 272 or 269 or 268:
+                set {_a} to " NE"
+                set {_b} to "     "
+                set {_c} to " East "
+                set {_d} to "     "
+                set {_e} to "SE "
+              else:
+                if round(yaw of player) = 315 or 314 or 313 or 316 or 317:
+                  set {_a} to " S"
+                  set {_b} to "     "
+                  set {_c} to "Southeast"
+                  set {_d} to "     "
+                  set {_e} to "E "
+                else:      
+                  if round(yaw of player) > 2:
+                    if round(yaw of player) < 43:
+                      set {_a} to "     "
+                      set {_b} to "S"
+                      set {_c} to "          "
+                      set {_d} to "SW"
+                      set {_e} to "     "
+                  if round(yaw of player) > 47:
+                    if round(yaw of player) < 88:
+                      set {_a} to "     "
+                      set {_b} to "SW"
+                      set {_c} to "          "
+                      set {_d} to "W"
+                      set {_e} to "     "
+                  if round(yaw of player) > 92:
+                    if round(yaw of player) < 133:
+                      set {_a} to "     "
+                      set {_b} to "W"
+                      set {_c} to "          "
+                      set {_d} to "NW"
+                      set {_e} to "     "
+                  if round(yaw of player) > 137:
+                    if round(yaw of player) < 178:
+                      set {_a} to "     "
+                      set {_b} to "NW"
+                      set {_c} to "          "
+                      set {_d} to "N"
+                      set {_e} to "     "
+                  if round(yaw of player) > 182:
+                    if round(yaw of player) < 223:
+                      set {_a} to "     "
+                      set {_b} to "N"
+                      set {_c} to "          "
+                      set {_d} to "NE"
+                      set {_e} to "     "
+                  if round(yaw of player) > 227:
+                    if round(yaw of player) < 268:
+                      set {_a} to "     "
+                      set {_b} to "NE"
+                      set {_c} to "          "
+                      set {_d} to "E"
+                      set {_e} to "     "
+                  if round(yaw of player) > 272:
+                    if round(yaw of player) < 313:
+                      set {_a} to "     "
+                      set {_b} to "E"
+                      set {_c} to "          "
+                      set {_d} to "SE"
+                      set {_e} to "     "
+                  if round(yaw of player) > 317:
+                    if round(yaw of player) < 358:
+                      set {_a} to "     "
+                      set {_b} to "SE"
+                      set {_c} to "          "
+                      set {_d} to "S"
+                      set {_e} to "     "
+  set bossbar "compas2.%player%" title to "&f&l◆ ◆   %{_a}%   %{_b}%   %{_c}%   %{_d}%   %{_e}%   &f&l◆ ◆" 
+
+every 1 tick:
+  loop all players:
+    if round(yaw of loop-player) = 0 or 1 or 360 or 359 or 2 or 358:
+      set {_a} to " SE"
+      set {_b} to "     "
+      set {_c} to "South"
+      set {_d} to "     "
+      set {_e} to "SW "
+    else:
+      if round(yaw of loop-player) = 90 or 91 or 89 or 92 or 88:
+        set {_a} to " SW"
+        set {_b} to "     "
+        set {_c} to "West"
+        set {_d} to "     "
+        set {_e} to "NW "
+      else:
+        if round(yaw of loop-player) = 45 or 46 or 44 or 43 or 47:
+          set {_a} to " S"
+          set {_b} to "     "
+          set {_c} to "Southwest"
+          set {_d} to "     "
+          set {_e} to "W "
+        else:
+          if round(yaw of loop-player) = 135 or 134 or 136 or 137 or 133:
+            set {_a} to " W"
+            set {_b} to "     "
+            set {_c} to "Northwest"
+            set {_d} to "     "
+            set {_e} to "N "
+          else:
+            if round(yaw of loop-player) = 180 or 181 or 182 or 179 or 178:
+              set {_a} to " NW"
+              set {_b} to "     "
+              set {_c} to "North"
+              set {_d} to "     "
+              set {_e} to "NE "
+            else:
+              if round(yaw of loop-player) = 225 or 226 or 227 or 224 or 223:
+                set {_a} to " N"
+                set {_b} to "     "
+                set {_c} to "Northeast"
+                set {_d} to "     "
+                set {_e} to "E "
+              else:
+                if round(yaw of loop-player) = 270 or 271 or 272 or 269 or 268:
+                  set {_a} to " NE"
+                  set {_b} to "     "
+                  set {_c} to " East "
+                  set {_d} to "     "
+                  set {_e} to "SE "
+                else:
+                  if round(yaw of loop-player) = 315 or 314 or 313 or 316 or 317:
+                    set {_a} to " S"
+                    set {_b} to "     "
+                    set {_c} to "Southeast"
+                    set {_d} to "     "
+                    set {_e} to "E "
+                  else:      
+                    if round(yaw of loop-player) > 2:
+                      if round(yaw of loop-player) < 43:
+                        set {_a} to "     "
+                        set {_b} to "S"
+                        set {_c} to "          "
+                        set {_d} to "SW"
+                        set {_e} to "     "
+                    if round(yaw of loop-player) > 47:
+                      if round(yaw of loop-player) < 88:
+                        set {_a} to "     "
+                        set {_b} to "SW"
+                        set {_c} to "          "
+                        set {_d} to "W"
+                        set {_e} to "     "
+                    if round(yaw of loop-player) > 92:
+                      if round(yaw of loop-player) < 133:
+                        set {_a} to "     "
+                        set {_b} to "W"
+                        set {_c} to "          "
+                        set {_d} to "NW"
+                        set {_e} to "     "
+                    if round(yaw of loop-player) > 137:
+                      if round(yaw of loop-player) < 178:
+                        set {_a} to "     "
+                        set {_b} to "NW"
+                        set {_c} to "          "
+                        set {_d} to "N"
+                        set {_e} to "     "
+                    if round(yaw of loop-player) > 182:
+                      if round(yaw of loop-player) < 223:
+                        set {_a} to "     "
+                        set {_b} to "N"
+                        set {_c} to "          "
+                        set {_d} to "NE"
+                        set {_e} to "     "
+                    if round(yaw of loop-player) > 227:
+                      if round(yaw of loop-player) < 268:
+                        set {_a} to "     "
+                        set {_b} to "NE"
+                        set {_c} to "          "
+                        set {_d} to "E"
+                        set {_e} to "     "
+                    if round(yaw of loop-player) > 272:
+                      if round(yaw of loop-player) < 313:
+                        set {_a} to "     "
+                        set {_b} to "E"
+                        set {_c} to "          "
+                        set {_d} to "SE"
+                        set {_e} to "     "
+                    if round(yaw of loop-player) > 317:
+                      if round(yaw of loop-player) < 358:
+                        set {_a} to "     "
+                        set {_b} to "SE"
+                        set {_c} to "          "
+                        set {_d} to "S"
+                        set {_e} to "     "
+    set bossbar "compas2.%loop-player%" title to "&f&l◆ ◆   %{_a}%   %{_b}%   %{_c}%   %{_d}%   %{_e}%   &f&l◆ ◆" 
+
+on join:
+  create bossbar titled "" and id "compas1.%player%" for player with progress 100 with colors white
+  create bossbar titled "Compass" and id "compas2.%player%" for player with progress 100 with colors white
