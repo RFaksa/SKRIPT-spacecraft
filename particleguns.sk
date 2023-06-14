@@ -1,0 +1,550 @@
+Options:
+    max_damage: 50
+    max_fire_rate: 20
+    max_reload_time: 20
+    max_mag_size: 1000
+    max_rounds_per_shot: 10
+    max_range: 50
+
+function updateWeapons():
+    loop {weapons::*}:
+        delete {weapon::%loop-value%::*}
+    delete {weapons::*}
+    delete {ammos::*}
+
+    # Weapon Initialization Arguments:
+    # Weapon name (unique), Item, Damage, Fire Rate (ticks), Reload Time (seconds), Magazine Size, Rounds Per Shot, Range
+  
+           # ID (name)      # Item                  # Damage    # Fire Rate     # Reload Time   # Mag size  # Rounds / shot     # Range
+    weapon("Instant",       bedrock,                20,          4,              8,              50,         1,                  40)
+    weapon("Lightning",     gold ingot,             10,          8,              1,              80,         1,                  20)
+    weapon("Zap",           diamond,                1,           1,              1,              100,        1,                  30)
+    weapon("Line",          redstone dust,          15,          4,              2,              20,         1,                  20)
+    weapon("Helix",         nether quartz,          4,           4,              8,              10,         1,                  30)
+    weapon("Dual Helix",    popped chorus fruit,    15,          4,              2,              60,         1,                  40)
+    weapon("Circle",        blaze rod,              50,          16,             8,              40,         1,                  50)
+    weapon("Control",       ender pearl,            10,          1,             1,              90,         1,                  900)
+    weapon("Triple Sweep",  stone sword,            1,           4,              5,              100,        1,                  30)
+
+function fireWeapon(p: player, id: string, handVec: vector, headVec: vector):
+
+    set {_range} to getWeaponData(tool of {_p}, "range")
+    set {_world} to world of {_p}
+
+    if {_id} = "Instant":
+        set {_pVec} to vector from yaw yaw of {_p} and pitch pitch of {_p}
+        set standard length of {_pVec} to 0.01
+        while standard length of {_pVec} < {_range}:
+            set {_loc} to getLocation({_handVec} ++ {_pVec}, {_world})
+            if block at {_loc} is solid:
+                exit 2 sections
+            set {_tmp::*} to entities in radius 2 of {_loc}
+            remove {_p} from {_tmp::*}
+            loop {_tmp::*}:
+                set {_targets::%loop-value%} to loop-value
+            add 0.1 to standard length of {_pVec}
+            play soul fire flame at {_loc}
+        loop {_targets::*}:
+            inflictDamage(loop-value, {_p}, {weapon::%{_id}%::damage})
+
+        # projectile hit at {_loc}
+        # example:
+        # create explosion with power 3 at {_loc}
+        
+
+    if {_id} = "Lightning":
+        set {_pVec} to vector from yaw yaw of {_p} and pitch pitch of {_p}
+        set standard length of {_pVec} to 0.01
+        set {_angVec} to {_handVec}
+        while standard length of {_angVec} -- {_handVec} < {_range}:
+            loop 20 times:
+                set {_loc} to getLocation({_angVec} ++ {_pVec}, {_world})
+                if block at {_loc} is solid:
+                    exit 3 sections
+                set {_tmp::*} to entities in radius 2 of {_loc}
+                remove {_p} from {_tmp::*}
+                loop {_tmp::*}:
+                    set {_targets::%loop-value-2%} to loop-value-2
+                play angry villager at {_loc}
+                add 0.2 to standard length of {_pVec}
+            set {_angVec} to vector of {_loc}
+            set {_rotVecV} to {_pVec}
+            subtract 90 from pitch of {_rotVecV}
+            set {_rotVecH} to {_pVec}
+            subtract 90 from yaw of {_rotVecH}
+            rotate {_pVec} around {_rotVecV} by random integer between -90 and 90
+            rotate {_pVec} around {_rotVecH} by random integer between -90 and 90
+            set standard length of {_pVec} to 0.01
+        loop {_targets::*}:
+            inflictDamage(loop-value, {_p}, {weapon::%{_id}%::damage})
+        # projectile hit at {_loc}
+
+    if {_id} = "Zap":
+        set {_vel} to vector from yaw yaw of {_p} and pitch pitch of {_p}
+        set {_pVec} to {_vel}
+        set standard length of {_pVec} to 0.01
+        set {_rotVecV} to {_pVec}
+        subtract 90 from pitch of {_rotVecV}
+        set {_rotVecH} to {_pVec}
+        subtract 90 from yaw of {_rotVecH}
+        set {_angVec} to {_handVec}
+        
+        while standard length of {_angVec} -- {_handVec} < {_range}:
+            loop 20 times:
+                set {_loc} to getLocation({_angVec} ++ {_pVec}, {_world})
+                if block at {_loc} is solid:
+                    exit 3 sections
+                set {_tmp::*} to entities in radius 2 of {_loc}
+                remove {_p} from {_tmp::*}
+                loop {_tmp::*}:
+                    set {_targets::%loop-value-2%} to loop-value-2
+                play end rod at {_loc}
+                add 0.2 to standard length of {_pVec}
+            set {_angVec} to vector of {_loc}
+            set {_pVec} to {_vel}
+            rotate {_pVec} around {_rotVecV} by random integer between -20 and 20
+            rotate {_pVec} around {_rotVecH} by random integer between -20 and 20
+            set standard length of {_pVec} to 0.01
+        loop {_targets::*}:
+            inflictDamage(loop-value, {_p}, {weapon::%{_id}%::damage})
+        # projectile hit at {_loc}
+
+    if {_id} = "Line":
+        set {_pVec} to vector from yaw yaw of {_p} and pitch pitch of {_p}
+        set standard length of {_pVec} to 0.01
+        while standard length of {_pVec} < {_range}:
+            set {_loc} to getLocation({_handVec} ++ {_pVec}, {_world})
+            if block at {_loc} is solid:
+                exit 2 sections
+            set {_tmp::*} to entities in radius 2 of {_loc}
+            remove {_p} from {_tmp::*}
+            loop {_tmp::*}:
+                if {_hurt::*} does not contain uuid of loop-value:
+                    inflictDamage(loop-value, {_p}, {weapon::%{_id}%::damage})
+                    add uuid of loop-value to {_hurt::*}
+            play sonic boom at {_loc}
+            add 1 to standard length of {_pVec}
+            wait 1 tick
+        # projectile hit at {_loc}
+
+    if {_id} = "Helix":
+        set {_rotVec} to vector from yaw yaw of {_p} and pitch pitch of {_p}
+        set standard length of {_rotVec} to 0.01
+        set {_pVec} to {_rotVec}
+        subtract 90 from pitch of {_pVec}
+        set standard length of {_pVec} to 1
+        while standard length of {_rotVec} ++ {_pVec} < {_range}:
+            set {_loc} to getLocation({_handVec} ++ {_rotVec} ++ {_pVec}, {_world})
+            if block at {_loc} is solid:
+                exit 2 sections
+            set {_tmp::*} to entities in radius 2 of {_loc}
+            remove {_p} from {_tmp::*}
+            loop {_tmp::*}:
+                if {_hurt::*} does not contain uuid of loop-value:
+                    inflictDamage(loop-value, {_p}, {weapon::%{_id}%::damage})
+                    add uuid of loop-value to {_hurt::*}
+            play heart at {_loc}
+            rotate {_pVec} around {_rotVec} by 30
+            add 0.5 to standard length of {_rotVec}
+            wait 1 tick
+        # projectile hit at {_loc}
+
+    if {_id} = "Dual Helix":
+        set {_rotVec} to vector from yaw yaw of {_p} and pitch pitch of {_p}
+        set standard length of {_rotVec} to 0.01
+        set {_pVec} to {_rotVec}
+        subtract 90 from pitch of {_pVec}
+        set standard length of {_pVec} to 1
+        while standard length of {_rotVec} ++ {_pVec} < {_range}:
+            loop 2 times:
+                set {_loc} to getLocation({_handVec} ++ {_rotVec} ++ {_pVec}, {_world})
+                if block at {_loc} is solid:
+                    exit 3 sections
+                set {_tmp::*} to entities in radius 2 of {_loc}
+                remove {_p} from {_tmp::*}
+                loop {_tmp::*}:
+                    if {_hurt::*} does not contain uuid of loop-value-2:
+                        inflictDamage(loop-value-2, {_p}, {weapon::%{_id}%::damage})
+                        add uuid of loop-value-2 to {_hurt::*}
+                play squid ink at {_loc}
+                rotate {_pVec} around {_rotVec} by 180
+            rotate {_pVec} around {_rotVec} by 30
+            add 0.5 to standard length of {_rotVec}
+            wait 1 tick
+        # projectile hit at {_loc}
+
+    if {_id} = "Circle":
+        set {_rotVec} to vector from yaw yaw of {_p} and pitch pitch of {_p}
+        set standard length of {_rotVec} to 0.01
+        set {_pVec} to {_rotVec}
+        subtract 90 from pitch of {_pVec}
+        set standard length of {_pVec} to random number between 0.3 and 0.7
+        while standard length of {_rotVec} ++ {_pVec} < {_range}:
+            loop 36 times:
+                set {_loc} to getLocation({_handVec} ++ {_rotVec} ++ {_pVec}, {_world})
+                if block at {_loc} is solid:
+                    exit 3 sections
+                set {_tmp::*} to entities in radius 2 of {_loc}
+                remove {_p} from {_tmp::*}
+                loop {_tmp::*}:
+                    if {_hurt::*} does not contain uuid of loop-value-2:
+                        inflictDamage(loop-value-2, {_p}, {weapon::%{_id}%::damage})
+                        add uuid of loop-value-2 to {_hurt::*}
+                play flame at {_loc}
+                rotate {_pVec} around {_rotVec} by 10
+            rotate {_pVec} around {_rotVec} by 30
+            set standard length of {_pVec} to random number between 0.3 and 0.7
+            add 1 to standard length of {_rotVec}
+            wait 1 tick
+        # projectile hit at {_loc}
+
+    if {_id} = "Control":
+        set {_rotVec} to vector from yaw yaw of {_p} and pitch pitch of {_p}
+        set standard length of {_rotVec} to 0.01
+        set {_pVec} to {_rotVec}
+        subtract 90 from pitch of {_pVec}
+        set standard length of {_pVec} to 0.2
+        while standard length of {_rotVec} ++ {_pVec} < {_range}:
+            set {_eyeVec} to vector of head location of {_p}
+            add 0.5 to {_len}
+            loop 36 times:
+                set {_loc} to getLocation({_eyeVec} ++ {_rotVec} ++ {_pVec}, {_world})
+                if block at {_loc} is solid:
+                    exit 3 sections
+                set {_tmp::*} to entities in radius 2 of {_loc}
+                remove {_p} from {_tmp::*}
+                loop {_tmp::*}:
+                    if {_hurt::*} does not contain uuid of loop-value-2:
+                        inflictDamage(loop-value-2, {_p}, {weapon::%{_id}%::damage})
+                        add uuid of loop-value-2 to {_hurt::*}
+                play glow at {_loc}
+                rotate {_pVec} around {_rotVec} by 10
+            set yaw of {_rotVec} to yaw of {_p}
+            set pitch of {_rotVec} to pitch of {_p}
+            set standard length of {_rotVec} to {_len}
+            rotate {_pVec} around {_rotVec} by 30
+            wait 1 tick
+        # projectile hit at {_loc}
+
+    if {_id} = "Triple Sweep":
+        set {_rotVec} to vector from yaw yaw of {_p} and pitch pitch of {_p}
+        set standard length of {_rotVec} to 0.01
+        loop 3 times:
+            add {_rotVec} to {_pVec::*}
+        subtract 90 from pitch of {_rotVec}
+        set {_degrees} to -9
+        set {_cone} to abs({_degrees}) * 2
+        loop {_pVec::*}:
+            rotate {_pVec::%loop-index%} around {_rotVec} by {_degrees}
+            set {_degrees} to {_degrees} + {_cone} / ((size of {_pVec::*}) - 1)
+        while standard length of random element out of {_pVec::*} < {_range}:
+            if size of {_pVec::*} <= 0:
+                exit 2 sections
+            loop {_pVec::*}:
+                if {_pVec::%loop-index%} is set:
+                    set {_loc} to getLocation({_handVec} ++ {_pVec::%loop-index%}, {_world})
+                    if block at {_loc} is solid:
+
+                        # projectile hit at {_loc}
+
+                        delete {_pVec::%loop-index%}
+                    set {_tmp::*} to entities in radius 2 of {_loc}
+                    remove {_p} from {_tmp::*}
+                    loop {_tmp::*}:
+                        if {_hurt::*} does not contain uuid of loop-value-2:
+                            inflictDamage(loop-value-2, {_p}, {weapon::%{_id}%::damage})
+                            add uuid of loop-value-2 to {_hurt::*}
+                    play sweep attack at {_loc}
+                add 1 to standard length of {_pVec::%loop-index%}
+
+            wait 1 tick
+
+function weapon(id: string, item: item, damage: integer, fire_rate: integer, reload_time: integer, mag_size: integer, rounds_per_shot: integer, range: integer):
+    set {weapons::%{_id}%} to {_id}
+    set {weapon::%{_id}%::name} to {_id} in strict proper case
+    set {weapon::%{_id}%::item} to {_item}
+    set {weapon::%{_id}%::damage} to min({_damage}, {@max_damage})
+    set {weapon::%{_id}%::fire_rate} to max({_fire_rate}, 1)
+    set {weapon::%{_id}%::reload_time} to max({_reload_time}, 1)
+    set {weapon::%{_id}%::mag_size} to min({_mag_size}, {@max_mag_size})
+    set {weapon::%{_id}%::rounds_per_shot} to min({_rounds_per_shot}, {@max_rounds_per_shot})
+    set {weapon::%{_id}%::range} to min({_range}, {@max_range})
+
+function useWeapon(weapon: item, p: player):
+    set {_headVec} to vector of head location of {_p}
+    set {_tmpVec} to vector from yaw yaw of {_p} and pitch pitch of {_p}
+    set {_rotVec} to {_tmpVec}
+    subtract 90 from pitch of {_rotVec}
+    add 50 to pitch of {_tmpVec}
+    rotate {_tmpVec} around {_rotVec} by -50
+    set standard length of {_tmpVec} to 1
+    set {_handVec} to {_headVec} ++ {_tmpVec}
+
+    loop getWeaponData({_weapon}, "rounds_per_shot") times:
+        fireWeapon({_p}, getWeaponId({_weapon}), {_handVec}, {_headVec})
+
+function giveWeapon(p: player, id: string):
+    give weaponItem({_id}) to {_p}
+
+function weaponItem(id: string) :: item:
+    set {_item} to {weapon::%{_id}%::item}
+    set {_nbt} to nbt compound of {_item}
+    set tag "id" of {_nbt} to {_id} in strict proper case
+    set tag "damage" of {_nbt} to {weapon::%{_id}%::damage}
+    set tag "fire_rate" of {_nbt} to {weapon::%{_id}%::fire_rate}
+    set tag "reload_time" of {_nbt} to {weapon::%{_id}%::reload_time}
+    set tag "mag_size" of {_nbt} to {weapon::%{_id}%::mag_size}
+    set tag "ammo" of {_nbt} to {weapon::%{_id}%::mag_size}
+    set tag "rounds_per_shot" of {_nbt} to {weapon::%{_id}%::rounds_per_shot}
+    set tag "range" of {_nbt} to {weapon::%{_id}%::range}
+    set tag "serial" of {_nbt} to newSerialNumber({_id})
+    set tag "cd" of {_nbt} to 0
+    set tag "reloading" of {_nbt} to 0
+    set {_weapon} to {weapon::%{_id}%::item} with nbt {_nbt}
+    set name of {_weapon} to formatWeaponName({weapon::%{_id}%::name}, {weapon::%{_id}%::mag_size})
+    set line 2 of lore of {_weapon} to "&fDamage:"
+    set line 3 of lore of {_weapon} to "%statsBar(ceil(10 * {weapon::%{_id}%::damage} / {@max_damage}))%"
+    set line 4 of lore of {_weapon} to "&fFire rate:"
+    set line 5 of lore of {_weapon} to "%statsBar(ceil(10 * round(20 / {weapon::%{_id}%::fire_rate}) / {@max_fire_rate}))%"
+    set line 6 of lore of {_weapon} to "&fReload time:"
+    set line 7 of lore of {_weapon} to "%statsBar(ceil(10 * round(20 / {weapon::%{_id}%::reload_time}) / {@max_reload_time}))%"
+    set line 8 of lore of {_weapon} to "&fMag size:"
+    set line 9 of lore of {_weapon} to "%statsBar(ceil(10 * {weapon::%{_id}%::mag_size} / {@max_mag_size}))%"
+    set line 10 of lore of {_weapon} to "&fRounds / shot:"
+    set line 11 of lore of {_weapon} to "%statsBar(ceil(10 * {weapon::%{_id}%::rounds_per_shot} / {@max_rounds_per_shot}))%"
+    set line 12 of lore of {_weapon} to "&fRange:"
+    set line 13 of lore of {_weapon} to "%statsBar(ceil(10 * {weapon::%{_id}%::range} / {@max_range}))%"
+    return {_weapon}
+
+function reloadWeapon(p: player):
+    if getWeaponData(tool of {_p}, "ammo") = getWeaponData(tool of {_p}, "mag_size"):
+        stop
+    if getWeaponData(tool of {_p}, "reloading") = 1:
+        stop
+    setWeaponData({_p}, "reloading", 1)
+    set {_weapon} to tool of {_p}
+    set {_id} to getWeaponId({_weapon})
+    set {_reloadtime} to getWeaponData(tool of {_p}, "reload_time") * 20
+    while getWeaponId(tool of {_p}) = getWeaponId({_weapon}):
+        if getWeaponData(tool of {_p}, "serial") != getWeaponData({_weapon}, "serial"):
+            exit 2 sections
+        send action bar "&f[ &b%{_id}% &f] - %reloadBar(ceil({_reload} / {_reloadtime} * 10))% &f- [ &b%formatDigits(floor({_reload} / {_reloadtime} * 100), 2)%%% &f]" to {_p}
+        if {_reload} >= {_reloadtime}:
+            set {_ammo} to getWeaponData(tool of {_p}, "mag_size")
+            setWeaponData({_p}, "ammo", {_ammo})
+            set name of tool of {_p} to formatWeaponName(getWeaponId(tool of {_p}), getWeaponData(tool of {_p}, "ammo"))
+            exit 2 sections
+        wait 1 tick
+        add 1 to {_reload}
+    send action bar "" to {_p}
+    resetTags({_p}, "reloading")
+    resetTags({_p}, "cd")
+
+function removeAmmo(weapon: item, p: player):
+    set {_id} to getWeaponId(tool of {_p})
+    setWeaponData({_p}, "ammo", getWeaponData(tool of {_p}, "ammo") - getWeaponData(tool of {_p}, "rounds_per_shot"))
+    set name of tool of {_p} to formatWeaponName(getWeaponId(tool of {_p}), getWeaponData(tool of {_p}, "ammo"))
+
+function resetTags(p: player, tag: string):
+    loop inventory of {_p}:
+        if isWeapon(loop-value) = true:
+            set {_nbt} to nbt compound of loop-value
+            set tag {_tag} of {_nbt} to 0
+            set {_weapon} to loop-value with nbt {_nbt}
+            set {_slot} to index of loop-value
+            set slot {_slot} of {_p} to {_weapon}
+
+function getLocation(vec: vector, world: world) :: location:
+    return location at (x component of {_vec}, y component of {_vec}, z component of {_vec}) in world {_world}
+
+function getWeaponId(weapon: item) :: string:
+    set {_nbt} to nbt compound of {_weapon}
+    return "%tag "id" of {_nbt}%"
+
+function getWeaponData(weapon: item, data: string) :: integer:
+    set {_nbt} to nbt compound of {_weapon}
+    return "%tag {_data} of {_nbt}%" parsed as integer
+
+function setWeaponData(p: player, data: string, value: number):
+    set {_nbt} to nbt compound of tool of {_p}
+    set tag {_data} of {_nbt} to {_value}
+
+function isWeapon(weapon: item) :: boolean:
+    if {weapons::*} contains getWeaponId({_weapon}):
+        return true
+    return false
+
+function isReloading(p: player) :: boolean:
+    if getWeaponData(tool of {_p}, "reloading") = 1:
+        return true
+    return false
+
+function getWeaponsInInventory(p: player) :: items:
+    loop inventory of {_p}:
+        if isWeapon(loop-value) = true:
+            add loop-value to {_weapons::*}
+    return {_weapons::*}
+
+function formatWeaponName(name: string, ammo: number) :: string:
+    set {_name} to {_name} in strict proper case
+    return "&b%{_name}% &f[&3%{_ammo}%&f]"
+
+function newSerialNumber(id: string) :: integer:
+    add 1 to {serial::%{_id}%}
+    return {serial::%{_id}%}
+
+function formatDigits(i: integer, n: integer) :: string:
+    set {_fill} to ""
+    loop {_n} - countDigit({_i}) times:
+        set {_fill} to "0%{_fill}%"
+    return "%{_fill}%%{_i}%"
+
+function countDigit(n: integer) :: integer:
+    if {_n} != 0:
+        return floor(log({_n}) + 1)
+    return 1
+
+function inflictDamage(victim: entity, attacker: entity, dmg: number):
+    set {_total} to {_dmg}
+    damage {_victim} by {_total}
+
+function reloadBar(i: integer) :: strings:
+    if {_i} <= 0:
+        return "&8██████████"
+    loop {_i} times:
+        set {_block} to "&c█"
+        if {_i} > 3:
+            set {_block} to "&6█"
+        if {_i} > 6:
+            set {_block} to "&e█"
+        if {_i} > 9:
+            set {_block} to "&a█"
+        add {_block} to {_bar::*}
+    loop 10 - size of {_bar::*} times:
+        add "&8█" to {_bar::*}
+    set {_bar} to "%{_bar::1}%%{_bar::2}%%{_bar::3}%%{_bar::4}%%{_bar::5}%%{_bar::6}%%{_bar::7}%%{_bar::8}%%{_bar::9}%%{_bar::10}%"
+    return {_bar}
+
+function statsBar(i: integer) :: strings:
+    if {_i} <= 0:
+        return "&8▔▔▔▔▔▔▔▔▔▔"
+    loop {_i} times:
+        set {_block} to "&a▔"
+        if loop-value > 3:
+            set {_block} to "&e▔"
+        if loop-value > 6:
+            set {_block} to "&6▔"
+        if loop-value > 9:
+            set {_block} to "&c▔"
+        add {_block} to {_bar::*}
+    loop 10 - size of {_bar::*} times:
+        add "&8▔" to {_bar::*}
+    set {_bar} to "%{_bar::1}%%{_bar::2}%%{_bar::3}%%{_bar::4}%%{_bar::5}%%{_bar::6}%%{_bar::7}%%{_bar::8}%%{_bar::9}%%{_bar::10}%"
+    return {_bar}
+
+on right click:
+    set {_p} to event-player
+    set {_weapon} to tool of {_p}
+    if isWeapon({_weapon}) is false:
+        stop
+    cancel event
+    set {_id} to getWeaponId({_weapon})
+    if getWeaponData({_weapon}, "cd") = 1:
+        stop
+    if (getWeaponData({_weapon}, "ammo")) <= 0:
+        reloadWeapon({_p})
+        stop
+    setWeaponData({_p}, "cd", 1)
+    set {_fire_rate} to getWeaponData({_weapon}, "fire_rate")
+    loop min(max(1, 4 / {_fire_rate}), getWeaponData({_weapon}, "ammo")) times:
+        if getWeaponId(tool of {_p}) != getWeaponId({_weapon}):
+            exit 2 sections
+        if getWeaponData(tool of {_p}, "serial") != getWeaponData({_weapon}, "serial"):
+            exit 2 sections
+        removeAmmo({_weapon}, {_p})
+        useWeapon({_weapon}, {_p})
+        loop {_fire_rate} times:
+            wait 1 tick
+            if getWeaponId(tool of {_p}) != getWeaponId({_weapon}):
+                exit 3 sections
+    resetTags({_p}, "cd")
+
+on left click:
+    set {_p} to event-player
+    set {_weapon} to tool of {_p}
+    if isWeapon({_weapon}) is false:
+        stop
+    cancel event
+
+on drop:
+    set {_p} to event-player
+    set {_i} to event-item
+    if isWeapon({_i}) is true:
+        cancel event
+        wait 1 tick
+        reloadWeapon({_p})
+        
+on join:
+    resetTags({_p}, "reloading")
+    resetTags({_p}, "cd")
+
+on load:
+    updateWeapons()
+    broadcast "&7Weapons loaded: &3%size of {weapons::*}%"
+
+command /weapons [<string>] [<string>]:
+    executable by: players
+    trigger:
+        set {_p} to event-player
+        set {_u} to uuid of {_p}
+        if arg 1 is not set:
+            sendWeaponArguments({_p})
+            stop
+
+        if arg 1 is "list":
+            if arg 2 is set:
+                sendWeaponArguments({_p})
+                stop
+            send "&7|&m        &r&7[ &3List of weapons &7]&m        &r&7|" to {_p}
+            loop {weapons::*}:
+                send "&7- &b%loop-value%" to {_p}
+            stop
+
+        if arg 1 is "info":
+            if arg 2 is not set:
+                sendWeaponArguments({_p})
+                stop
+            if {weapons::*} does not contain arg 2:
+                send "&7Weapon &b%arg 2% &7Was not found in the list of weapons!" to {_p}
+                stop
+            send "&7|&m        &r&7[ &3%arg 2% &7]&m        &r&7|" to {_p}
+            loop {weapon::%arg 2%::*}:
+                send "&7- %loop-index%: &b%loop-value%" to {_p}
+            stop
+
+        if arg 1 is "get":
+            if arg 2 is not set:
+                sendWeaponArguments({_p})
+                stop
+            if arg 2 is "*":
+                loop {weapons::*}:
+                    giveWeapon({_p}, loop-value)
+                    send "&7Weapon &b%loop-value% &7added to inventory!" to {_p}
+                stop
+            if {weapons::*} does not contain arg 2:
+                send "&7Weapon &b%arg 2% &7was not found in the list of weapons!" to {_p}
+                stop
+            giveWeapon({_p}, arg 2)
+            send "&7Weapon &b%arg 2% &7added to inventory!" to {_p}
+            stop
+
+        sendWeaponArguments({_p})
+
+function sendWeaponArguments(p: player):
+    send "&7|&m           &r&7[ &3Commands &7]&m           &r&7|" to {_p}
+    send "&b/weapons update" to {_p}
+    send "&b/weapons list" to {_p}
+    send "&b/weapons get [weapon id]" to {_p}
+    send "&b/weapons info [weapon id]" to {_p}
+    send "&7|&m           &r&7[ &3Commands &7]&m           &r&7|" to {_p}
+

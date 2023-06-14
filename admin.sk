@@ -10,3 +10,9 @@ command /admin:
 every 1 hour:
   loop all entities in radius 5 of location at 1, 1, 1 in world "void":
     kill loop-entity   
+
+command /pica:
+  trigger:
+    make all players see block at location (-210, 85, -180) in world "pindour" as green stained glass
+    make all players see block at location (-211, 85, -181) in world "pindour" as green stained glass
+    make all players see block at location (-211, 85, -180) in world "pindour" as green stained glass

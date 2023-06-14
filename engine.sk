@@ -5,11 +5,7 @@ on right click on blast furnace:
   loop 54 times:
     set slot {_gui.slot} of {_gui} to red stained glass pane named " "
     add 1 to {_gui.slot}
-  if {fuel::%player%} is not set:
-    set {fuel::%player%} to 0
-  if {fuelmax::%player%} is not set:
-    set {fuelmax::%player%} to 30
-  set slot 4 of {_gui} to beacon named "&b&lRemaining fuel: &9&l%{fuel::%player%}%/%{fuelmax::%player%}%"
+
   set slot 2 of {_gui} to green stained glass pane named " "
   set slot 6 of {_gui} to green stained glass pane named " "
   set slot 10 of {_gui} to purple stained glass pane named " "
@@ -45,30 +41,7 @@ on right click on blast furnace:
 on inventory click:
   if event-inventory's name contains "§6§lEngine":
     cancel event
-    if clicked item is End crystal named "&5&lEngine core":
-      if {fuel::%player%} >= {fuelmax::%player%}:
-        close player's inventory
-        stop
-      loop all items in player's inventory:
-        if name of loop-item is "&aBio fuel":
-          set {_n.1} to item amount of loop-item
-          exit loop
-        if name of loop-item is "&eRocket fuel":
-          set {_n.2} to item amount of loop-item
-      if {_n.1} > 0:
-        remove 1 kelp with name "&aBio fuel" from player
-        add 1 to {fuel::%player%}
-        if {fuel::%player%} > {fuelmax::%player%}:
-          set {fuel::%player%} to {fuelmax::%player%}
-        if event-inventory's name contains "§6§lEngine":
-          set slot 4 of current inventory of player to beacon named "&b&lRemaining fuel: &9&l%{fuel::%player%}%/%{fuelmax::%player%}%"
-      if {_n.2} > 0:
-        remove 1 dried kelp with name "&eRocket fuel" from player
-        add 3 to {fuel::%player%}
-        if {fuel::%player%} > {fuelmax::%player%}:
-          set {fuel::%player%} to {fuelmax::%player%}
-        if event-inventory's name contains "§6§lEngine":
-          set slot 4 of current inventory of player to beacon named "&b&lRemaining fuel: &9&l%{fuel::%player%}%/%{fuelmax::%player%}%"
+    
 on right click on end portal frame:
   cancel event
   if player has permission "space.ship":
@@ -77,16 +50,13 @@ on right click on end portal frame:
     loop 54 times:
       set slot {_gui.slot} of {_gui} to black stained glass pane named " "
       add 1 to {_gui.slot}
-    set slot 6 of {_gui} to {spacemap.planet.1} named "&2&l       Maldraxus" with lore "&e&m======================" and "&fRecomended level: &c30" and "&fRecomended gear level: &680" and "&e&m======================" and "&aFuel consumption: &23 &a(%{fuel::%player%}%)" and "&e&m======================"
-    set slot 10 of {_gui} to {spacemap.planet.2} named "Planet 2"
-    set slot 22 of {_gui} to {spacemap.planet.3} named "Planet 3"
-    if player is in world "void":
-      set slot 33 of {_gui} to warped button named "&6&l%player%’s ship" with lore "&e&m======================" and "&2&lYou are here!" and "&e&m======================"
-    else:
-      set slot 33 of {_gui} to warped button named "&6&l%player%’s ship" with lore "&e&m======================" and "&cYou need at least 3 fuels" and "&cto travel on your ship" and "&e&m======================"
-    set slot 39 of {_gui} to {spacemap.planet.4} named "Planet 4"
-    set slot 44 of {_gui} to {spacemap.planet.5} named "Planet 5"
-    set slot 45 of {_gui} to {spacemap.planet.6} named "Planet 6"
+    set slot 6 of {_gui} to {spacemap.planet.1} named "&2&l       Maldraxus" with lore "&7" and "&7some planet lol" and "&e&m======================" and "&fRecomended level: &c30" and "&fRecomended gear level: &680" and "&e&m======================"
+    set slot 10 of {_gui} to {spacemap.planet.2} named "&b&l         Nalmur" with lore "&7         not so soon         "
+    set slot 22 of {_gui} to {spacemap.planet.3} named "&e&l         Sandux" with lore "&7" and "&7sand planet" and "&e&m=======================" and "&fRecomended level: &c1" and "&fRecomended gear level: &620" and "&e&m======================="
+    set slot 33 of {_gui} to warped button named "&6&l%player%’s ship" with lore "&7" and "&e&m=======================" and "       &2&lYou are here!" and "&e&m======================="
+    set slot 39 of {_gui} to {spacemap.planet.4} named "&2&l       Kredundum" with lore "&7         not so soon         "
+    set slot 44 of {_gui} to {spacemap.planet.5} named "&5&l          Ralnum" with lore "&7          not so soon         "
+    set slot 45 of {_gui} to {spacemap.planet.6} named "&9&l        Luvusmun" with lore "&7         not so soon         "
     close inventory of player
     open {_gui} to player
     stop
@@ -104,16 +74,16 @@ command /spacemap:
     loop 54 times:
       set slot {_gui.slot} of {_gui} to black stained glass pane named " "
       add 1 to {_gui.slot}
-    set slot 6 of {_gui} to {spacemap.planet.1} named "&2&l       Maldraxus" with lore "&e&m======================" and "&fRecomended level: &c30" and "&fRecomended gear level: &680" and "&e&m======================" and "&aFuel consumption: &23 &a(%{fuel::%player%}%)" and "&e&m======================"
-    set slot 10 of {_gui} to {spacemap.planet.2} named "Planet 2"
-    set slot 22 of {_gui} to {spacemap.planet.3} named "Planet 3"
+    set slot 6 of {_gui} to {spacemap.planet.1} named "&2&l       Maldraxus" with lore "&7" and "&7some planet lol" and "&e&m======================" and "&fRecomended level: &c30" and "&fRecomended gear level: &680" and "&e&m======================"
+    set slot 10 of {_gui} to {spacemap.planet.2} named "&b&l         Nalmur" with lore "&7         not so soon         "
+    set slot 22 of {_gui} to {spacemap.planet.3} named "&e&l         Sandux" with lore "&7" and "&7sand planet" and "&e&m=======================" and "&fRecomended level: &c1" and "&fRecomended gear level: &620" and "&e&m======================="
     if player is in world "void":
-      set slot 33 of {_gui} to warped button named "&6&l%player%’s ship" with lore "&e&m======================" and "&2&lYou are here!" and "&e&m======================"
+      set slot 33 of {_gui} to warped button named "&6&l%player%’s ship" with lore "&7" and "&e&m=======================" and "       &2&lYou are here!" and "&e&m======================="
     else:
-      set slot 33 of {_gui} to warped button named "&6&l%player%’s ship" with lore "&e&m======================" and "&cYou need at least 3 fuels" and "&cto travel on your ship" and "&e&m======================"
-    set slot 39 of {_gui} to {spacemap.planet.4} named "Planet 4"
-    set slot 44 of {_gui} to {spacemap.planet.5} named "Planet 5"
-    set slot 45 of {_gui} to {spacemap.planet.6} named "Planet 6"
+      set slot 33 of {_gui} to warped button named "&6&l%player%’s ship" with lore "&7" and "&e&m======================" and "&cYou need at least 3 fuels" and "&cto travel on your ship" and "&e&m======================"
+    set slot 39 of {_gui} to {spacemap.planet.4} named "&2&l       Kredundum" with lore "&7         not so soon         "
+    set slot 44 of {_gui} to {spacemap.planet.5} named "&5&l          Ralnum" with lore "&7          not so soon         "
+    set slot 45 of {_gui} to {spacemap.planet.6} named "&9&l        Luvusmun" with lore "&7         not so soon         "
     close inventory of player
     open {_gui} to player
     stop
@@ -121,54 +91,65 @@ command /spacemap:
 on inventory click:
   if event-inventory's name contains "§6§lWhere are we heading?":
     cancel event
+#new planets add here
+#new planets add here
+#new planets add here
+    if clicked slot is not 6 or 22 or 33:
+#new planets add here
+#new planets add here
+#new planets add here
+      stop
     if clicked slot is 6:
-      if {fuel::%player%} >= 3:
-        if difference between {shipcooldown::%player%} and now is more than 1 minute:
-          delete {shipcooldown::%player%}
-        if {shipcooldown::%player%} is set:
-          send "&cWait a minute than you use your ship again!" to player
-          stop
-        if {shipcooldown::%player%} is not set:
-          set {shipcooldown::%player%} to now
-        add -3 to {fuel::%player%}
-        close inventory of player
-        add 1 to {planets::%player%}
-        set {_g} to "&a&lTravelling throught space" or "&a&lTravelling throught space"
-        loop 5 times:
-          send title " " with subtitle "&a&l%{_g}%." to player for 1 seconds
-          wait 1 second
-          send title " " with subtitle "&a&l%{_g}%.." to player for 1 seconds
-          wait 1 second
-          send title " " with subtitle "&a&l%{_g}%..." to player for 1 seconds
-          wait 1 second
-        send title " " with subtitle "&6&lLanding." to player for 5 seconds
-        wait 1 second
-        send title " " with subtitle "&6&lLanding.." to player for 5 seconds
-        wait 1 second
-        send title " " with subtitle "&6&lLanding..." to player for 5 seconds
-        wait 1 second
-        send title " " with subtitle "&6&lLanding." to player for 5 seconds
-        wait 1 second
-        send title " " with subtitle "&6&lLanding.." to player for 5 seconds
-        wait 1 second
-        teleport player to {planetspawn.1}
-        send title "&e&lLanded!" with subtitle "" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
-      else:
-        close inventory of player
-        send "&cYou need at least 3 fuels!"
-        stop
-    if name of clicked slot is "Planet 2":
+      if difference between {shipcooldown::%player%} and now is more than 1 minute:
+        delete {shipcooldown::%player%}
+        set {_planetnext::%player%} to 1
+    if clicked slot is 10:
       send "d" to all players
     if clicked slot is 22:
-      send "d" to all players
+      if difference between {shipcooldown::%player%} and now is more than 1 minute:
+        delete {shipcooldown::%player%}
+        set {_planetnext::%player%} to 3
     if clicked slot is 33:
       execute console command "/snonvip %player%"
+      stop
     if clicked slot is 39:
       send "d" to all players
     if clicked slot is 44:
       send "d" to all players
     if clicked slot is 45:
       send "d" to all players
+    if {shipcooldown::%player%} is set:
+      set {_timecss::%player%} to 60 seconds
+      set {_timecs::%player%} to difference between {shipcooldown::%player%} and now
+      remove {_timecs::%player%} from {_timecss::%player%}
+      send "&cWait a minute than you use your ship again! (%{_timecss::%player%}%)" to player
+      stop
+    if {_planetnext::%player%} is not set:
+      stop
+    if {shipcooldown::%player%} is not set:
+      set {shipcooldown::%player%} to now
+      close inventory of player
+      add 1 to {planets::%player%}
+      set {_g} to "&a&lTravelling throught space" or "&a&lTravelling throught space"
+      loop 5 times:
+        send title " " with subtitle "&a&l%{_g}%." to player for 1 seconds
+        wait 1 second
+        send title " " with subtitle "&a&l%{_g}%.." to player for 1 seconds
+        wait 1 second
+        send title " " with subtitle "&a&l%{_g}%..." to player for 1 seconds
+        wait 1 second
+      send title " " with subtitle "&6&lLanding." to player for 5 seconds
+      wait 1 second
+      send title " " with subtitle "&6&lLanding.." to player for 5 seconds
+      wait 1 second
+      send title " " with subtitle "&6&lLanding..." to player for 5 seconds
+      wait 1 second
+      send title " " with subtitle "&6&lLanding." to player for 5 seconds
+      wait 1 second
+      send title " " with subtitle "&6&lLanding.." to player for 5 seconds
+      wait 1 second
+      teleport player to {planetspawn.%{_planetnext::%player%}%}
+      send title "&e&lLanded!" with subtitle "" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
 
 command /setplanetspawn <number>:
   permission: admin

@@ -86,7 +86,7 @@ command /craft [<num>]:
       set slot 12 of {_gui} to white stained glass pane named "&7&n3"
       set slot 14 of {_gui} to white stained glass pane named "&7&n4"
       set slot 15 of {_gui} to white stained glass pane named "&7&n5"
-      set slot 16 of {_gui} to white stained glass pane named "&7&n3"
+      set slot 16 of {_gui} to white stained glass pane named "&7&n6"
       close inventory of player
       open {_gui} to player
       stop
