@@ -87,6 +87,7 @@ on chat:
       stop
 
 command /title <player> [<text>]:
+  permission: admin
   trigger:
     if arg-2 is set:
       set {title::%arg-1%} to arg-2

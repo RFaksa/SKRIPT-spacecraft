@@ -13,7 +13,8 @@ command /ship [<text>]:
 				set {ship.location.Z} to 0
 				delete {ship.created::*}
 				delete {ship::*}
-
+				delete {ship.location.X::*}
+				delete {ship.location.Z::*}
 				send "admin" to player
 				stop
 		if string-arg 1 is "create":
@@ -2748,29 +2749,29 @@ command /ship [<text>]:
 					close inventory of player
 					send "&cYou need premium rank for this action!" to player
 					stop
-				if {fuel::%player%} >= 3:
-					if difference between {shipcooldown::%player%} and now is more than 1 minute:
-						delete {shipcooldown::%player%}
-					if {shipcooldown::%player%} is set:
-						send "&cWait a minute than you use your ship again!" to player
-						stop
-					if {shipcooldown::%player%} is not set:
-						set {shipcooldown::%player%} to now
-					close inventory of player
-					set {_g} to "&a&lTravelling to your ship"
-					loop 2 times:
-						send title " " with subtitle "&a&l%{_g}%." to player for 1 seconds
-						wait 1 second
-						send title " " with subtitle "&a&l%{_g}%.." to player for 1 seconds
-						wait 1 second
-						send title " " with subtitle "&a&l%{_g}%..." to player for 1 seconds
-						wait 1 second
-					teleport player to {ship::%player%}
-					send title "&7[&eSpaceship&7]" with subtitle "&aWelcome aboard!" to player for 3 seconds with fadein 1 seconds and fade out 1 seconds
-				else:
-					close inventory of player
-					send "&cYou dont have enought fuel"
+				#if {fuel::%player%} >= 3:
+				if difference between {shipcooldown::%player%} and now is more than 1 minute:
+					delete {shipcooldown::%player%}
+				if {shipcooldown::%player%} is set:
+					send "&cWait a minute than you use your ship again!" to player
 					stop
+				if {shipcooldown::%player%} is not set:
+					set {shipcooldown::%player%} to now
+				close inventory of player
+				set {_g} to "&a&lTravelling to your ship"
+				loop 2 times:
+					send title " " with subtitle "&a&l%{_g}%." to player for 1 seconds
+					wait 1 second
+					send title " " with subtitle "&a&l%{_g}%.." to player for 1 seconds
+					wait 1 second
+					send title " " with subtitle "&a&l%{_g}%..." to player for 1 seconds
+					wait 1 second
+				teleport player to {ship::%player%}
+				send title "&7[&eSpaceship&7]" with subtitle "&aWelcome aboard!" to player for 3 seconds with fadein 1 seconds and fade out 1 seconds
+			#else:
+				#close inventory of player
+				#send "&cYou dont have enought fuel"
+				#stop
 		if {ship::%player%} is not set:
 			make player execute command "/ship create"
 command /snonvip [<player>]:
@@ -2785,29 +2786,32 @@ command /snonvip [<player>]:
 						close inventory of arg-1
 						send "&cYou are already on your ship!" to arg-1
 						stop
-					if {fuel::%arg-1%} >= 3:
-						if difference between {shipcooldown::%arg-1%} and now is more than 1 minute:
-							delete {shipcooldown::%arg-1%}
-						if {shipcooldown::%arg-1%} is set:
-							send "&cWait a minute than you use your ship again!" to arg-1
-							stop
-						if {shipcooldown::%arg-1%} is not set:
-							set {shipcooldown::%arg-1%} to now
-						close inventory of arg-1
-						set {_g} to "&a&lTravelling to your ship"
-						loop 2 times:
-							send title " " with subtitle "&a&l%{_g}%." to arg-1 for 1 seconds
-							wait 1 second
-							send title " " with subtitle "&a&l%{_g}%.." to arg-1 for 1 seconds
-							wait 1 second
-							send title " " with subtitle "&a&l%{_g}%..." to arg-1 for 1 seconds
-							wait 1 second
-						teleport arg-1 to {ship::%arg-1%}
-						send title "&7[&eSpaceship&7]" with subtitle "&aWelcome aboard!" to arg-1 for 3 seconds with fadein 1 seconds and fade out 1 seconds
-					else:
-						close inventory of arg-1
-						send "&cYou dont have enought fuel" to arg-1
+					#if {fuel::%arg-1%} >= 3:
+					if difference between {shipcooldown::%arg-1%} and now is more than 1 minute:
+						delete {shipcooldown::%arg-1%}
+					if {shipcooldown::%arg-1%} is set:
+						set {_timecss::%arg-1%} to 60 seconds
+						set {_timecs::%arg-1%} to difference between {shipcooldown::%arg-1%} and now
+						remove {_timecs::%arg-1%} from {_timecss::%arg-1%}
+						send "&cWait a minute than you use your ship again! (%{_timecss::%arg-1%}%)" to arg-1
 						stop
+					if {shipcooldown::%arg-1%} is not set:
+						set {shipcooldown::%arg-1%} to now
+					close inventory of arg-1
+					set {_g} to "&a&lTravelling to your ship"
+					loop 2 times:
+						send title " " with subtitle "&a&l%{_g}%." to arg-1 for 1 seconds
+						wait 1 second
+						send title " " with subtitle "&a&l%{_g}%.." to arg-1 for 1 seconds
+						wait 1 second
+						send title " " with subtitle "&a&l%{_g}%..." to arg-1 for 1 seconds
+						wait 1 second
+					teleport arg-1 to {ship::%arg-1%}
+					send title "&7[&eSpaceship&7]" with subtitle "&aWelcome aboard!" to arg-1 for 3 seconds with fadein 1 seconds and fade out 1 seconds
+					#else:
+						#close inventory of arg-1
+						#send "&cYou dont have enought fuel" to arg-1
+						#stop
 on right click:
 	if clicked block is anvil:
 		cancel event
@@ -2824,8 +2828,8 @@ on right click:
 		make player execute command "/stash 1"
 	if clicked block is jukebox:
 		cancel event
-		make player execute command "/musicbox"
-command /musicbox:
+		make player execute command "/songs"
+command /songs:
 	aliases:/jukebox, /music
 	trigger:
 		set {_ship.gui::%player%} to a new chest inventory with 3 rows named "§b§lYour songs list!"

@@ -10,22 +10,332 @@ command /stats [<player>]:
     loop 36 times:
       set slot {_gui.slot} of {_gui} to purple stained glass pane named " "
       add 1 to {_gui.slot}
-    set slot 10 of {_gui} to wooden sword named "&c&lDamage" with lore " " and "&fLevel: %{strength::%{_p}%}%" and "&7Progress: %{strength.xp::%{_p}%}%/%{strength.xpneed::%{_p}%}%" and " " and "&cEarn &4combat &clevel to" and "&cincrease your &4damage."
-    set slot 11 of {_gui} to leather tunic named "&a&lDefence" with lore " " and "&fLevel: %{defence::%{_p}%}%" and "&7Progress: %{defence.xp::%{_p}%}%/%{defence.xpneed::%{_p}%}%" and " " and "&aEarn &2gathering &alevel to" and "&aincrease your &2defence."
-    set slot 12 of {_gui} to elytra named "&b&lAgility" with lore " " and "&fLevel: %{agility::%{_p}%}%" and "&7Progress: %{agility.xp::%{_p}%}%/%{agility.xpneed::%{_p}%}%" and " " and "&bEarn &3playtime &bto" and "&bincrease your &3agility."
+    set slot 10 of {_gui} to wooden sword named "&c&lCombat" with lore " " and "&fLevel: %{strength::%{_p}%}%" and "&7Progress: %{strength.xp::%{_p}%}%/%{strength.xpneed::%{_p}%}%" and " " and "&cEarn &4combat &clevel to" and "&cincrease your &4damage."
+    set slot 11 of {_gui} to leather tunic named "&a&lGathering" with lore " " and "&fLevel: %{defence::%{_p}%}%" and "&7Progress: %{defence.xp::%{_p}%}%/%{defence.xpneed::%{_p}%}%" and " " and "&aEarn &2gathering &alevel to" and "&aincrease your &2defence."
+    set slot 12 of {_gui} to elytra named "&b&lPlaytime" with lore " " and "&fLevel: %{agility::%{_p}%}%/10" and "&7Progress: %player's time played% (10hrs = 1 level)" and " " and "&bEarn &3playtime &bto" and "&bincrease your &3agility."
     set slot 14 of {_gui} to amethyst shard named "&d&lCharisma" with lore " " and "&fLevel: %{charisma::%{_p}%}%" and "&7Progress: %{charisma.xp::%{_p}%}%/%{charisma.xpneed::%{_p}%}%" and " " and "&dEarn &5quest points &dto" and "&dincrease your &5charisma."
     set slot 15 of {_gui} to fermented spider eye named "&6&lLuck" with lore " " and "&fLevel: %{luck::%{_p}%}%" and "&7Progress: %{luck.xp::%{_p}%}%/%{luck.xpneed::%{_p}%}%" and " " and "&6Kill mobs &eto" and "&eincrease your &6luck."
     set slot 16 of {_gui} to book named "&8&lWisdom" with lore " " and "&fLevel: %{wisdom::%{_p}%}%" and "&7Progress: %{wisdom.xp::%{_p}%}%/%{wisdom.xpneed::%{_p}%}%" and " " and "&7Learn &8crafting recipes" and "&7increase your &8wisdom."
-    set slot 19 of {_gui} to {bookabilities.1} named "&c&lDamage skill tree" with lore " " and "&fUnused points: &4%{strength.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &cdamage skill tree"
-    set slot 20 of {_gui} to {bookabilities.2} named "&a&lDefence skill tree" with lore " " and "&fUnused points: &4%{defence.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &adefence skill tree"
-    set slot 21 of {_gui} to {bookabilities.3} named "&b&lAgility skill tree" with lore " " and "&fUnused points: &4%{agility.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &bagility skill tree"
-    set slot 23 of {_gui} to {bookabilities.4} named "&d&lCharisma skill tree" with lore " " and "&fUnused points: &4%{charisma.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &dcharisma skill tree"
-    set slot 24 of {_gui} to {bookabilities.5} named "&6&lLuck skill tree" with lore " " and "&fUnused points: &4%{luck.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &6luck skill tree"
-    set slot 25 of {_gui} to {bookabilities.6} named "&8&lWisdom skill tree" with lore " " and "&fUnused points: &4%{wisdom.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &8wisdom skill tree"
+    set slot 19 of {_gui} to {bookabilities.1} named "&c&lDamage perks" with lore " " and "&fUnused points: &4%{strength.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &cdamage perks"
+    set slot 20 of {_gui} to {bookabilities.2} named "&a&lDefence perks" with lore " " and "&fUnused points: &4%{defence.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &adefence perks"
+    set slot 21 of {_gui} to {bookabilities.3} named "&b&lAgility perks" with lore " " and "&fUnused points: &4%{agility.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &bagility perks"
+    set slot 23 of {_gui} to {bookabilities.4} named "&d&lCharisma perks" with lore " " and "&fUnused points: &4%{charisma.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &dcharisma perks"
+    set slot 24 of {_gui} to {bookabilities.5} named "&6&lLuck perks" with lore " " and "&fUnused points: &4%{luck.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &6luck perks"
+    set slot 25 of {_gui} to {bookabilities.6} named "&8&lWisdom perks" with lore " " and "&fUnused points: &4%{wisdom.pts::%{_p}%}%" and "&e→ &a&nClick&7 to open &8wisdom perks"
     open {_gui} to player
 
+every 13 minutes:
+  loop all players:
+    if {playtime::%loop-player%} is not set:
+      set {playtime::%loop-player%} to 0
+    if loop-player's time played > "%({playtime::%loop-player%}+10)% hours" parsed as timespan:
+      if {agility::%loop-player%} < "%(1+{playtime::%loop-player%}/10)%" parsed as number:
+        add 10 to {playtime::%loop-player%}
+        add 1 to {agility::%loop-player%}
+        add 2 to {agility.pts::%loop-player%}
+
 on inventory click:
+  if event-inventory's name contains "&c&lYour damage perks":
+    cancel event
+    if name of clicked item is "&c&lCritical chance":
+      if {strength.pts::%player%} > 0:
+        if {critchance.lvl::%player%} < 100:
+          add 0.5 to {critchance::%player%}
+          add 1 to {critchance.lvl::%player%}
+          add -1 to {strength.pts::%player%}
+          send title " " with subtitle "&c&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          close inventory of player
+    if name of clicked item is "&c&lHigher damage":
+      if {strength.pts::%player%} > 0:
+        add 2 to {bonusdmg::%player%}
+        add 1 to {bonusdmg.lvl::%player%}
+        add -1 to {strength.pts::%player%}
+        send title " " with subtitle "&c&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+        close inventory of player
+    if name of clicked item is "&c&lHigher close damage":
+      if {strength.pts::%player%} > 0:
+        add 5 to {bonusclosedmg::%player%}
+        add 1 to {bonusclosedmg.lvl::%player%}
+        add -1 to {strength.pts::%player%}
+        send title " " with subtitle "&c&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+        close inventory of player
+    if name of clicked item is "&c&lHigher range damage":
+      if {strength.pts::%player%} > 0:
+        add 5 to {bonusrangedmg::%player%}
+        add 1 to {bonusrangedmg.lvl::%player%}
+        add -1 to {strength.pts::%player%}
+        send title " " with subtitle "&c&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+        close inventory of player
+    if name of clicked item is "&c&lFire damage":
+      if {strength.pts::%player%} > 0:
+        if {firedmg.lvl::%player%} < 100:
+          add 0.5 to {firepercentdmg::%player%}
+          add 1 to {firedmg.lvl::%player%}
+          add -1 to {strength.pts::%player%}
+          send title " " with subtitle "&c&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          close inventory of player
+    if name of clicked item is "&c&lSlow chance":
+      if {strength.pts::%player%} > 0:
+        if {firedmg.lvl::%player%} < 100:
+          add 0.5 to {slowpercent::%player%}
+          add 1 to {slow.lvl::%player%}
+          add -1 to {strength.pts::%player%}
+          send title " " with subtitle "&c&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          close inventory of player
+    if name of clicked item is "&c&lLife steal":
+      if {strength.pts::%player%} > 0:
+        if {lifesteal.lvl::%player%} < 100:
+          add 0.25 to {lifesteal::%player%}
+          add 1 to {lifesteal.lvl::%player%}
+          add -1 to {strength.pts::%player%}
+          send title " " with subtitle "&c&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          close inventory of player
+  if event-inventory's name contains "&a&lYour defence perks":
+    cancel event
+    if name of clicked item is "&a&lDamage eater":
+      if {defence.pts::%player%} > 0:
+        if {defeater.lvl::%player%} < 100:
+          add 0.5 to {defeater::%player%}
+          add 1 to {defeater.lvl::%player%}
+          add -1 to {defence.pts::%player%}
+          send title " " with subtitle "&a&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          close inventory of player
+    if name of clicked item is "&a&lHigher defence":
+      if {defence.pts::%player%} > 0:
+        add 2 to {bonusdefence::%player%}
+        add 1 to {defbonus.lvl::%player%}
+        add -1 to {defence.pts::%player%}
+        send title " " with subtitle "&a&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+        close inventory of player
+    if name of clicked item is "&a&lDefence multiplier":
+      if {defence.pts::%player%} > 0:
+        if {defencemultiplier.lvl::%player%} < 100:
+          add 1 to {defencemultiplier::%player%}
+          add 1 to {defencemultiplier.lvl::%player%}
+          add -1 to {defence.pts::%player%}
+          send title " " with subtitle "&a&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          close inventory of player
+    if name of clicked item is "&a&lKnockback resistance":
+      if {defence.pts::%player%} > 0:
+        if {defknockback.lvl::%player%} < 100:
+          add 1 to {defknockback::%player%}
+          add 1 to {defknockback.lvl::%player%}
+          add -1 to {defence.pts::%player%}
+          send title " " with subtitle "&a&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          close inventory of player
+    if name of clicked item is "&a&lThrow away chance":
+      if {defence.pts::%player%} > 0:
+        if {defthrow.lvl::%player%} < 100:
+          add 0.5 to {defthrow::%player%}
+          add 1 to {defthrow.lvl::%player%}
+          add -1 to {defence.pts::%player%}
+          send title " " with subtitle "&a&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          close inventory of player
+    if name of clicked item is "&a&lThorns":
+      if {defence.pts::%player%} > 0:
+        if {defthorns.lvl::%player%} < 100:
+          add 0.5 to {defthorns::%player%}
+          add 1 to {defthorns.lvl::%player%}
+          add -1 to {defence.pts::%player%}
+          send title " " with subtitle "&a&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          close inventory of player
+    if name of clicked item is "&a&lDodge chance":
+      if {defence.pts::%player%} > 0:
+        if {defdodge.lvl::%player%} < 100:
+          add 0.25 to {defdodge::%player%}
+          add 1 to {defdodge.lvl::%player%}
+          add -1 to {defence.pts::%player%}
+          send title " " with subtitle "&a&l+ Perk level increased +" to player for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          close inventory of player
+  if event-inventory's name contains "&b&lYour agility perks":
+    cancel event
+  if event-inventory's name contains "&d&lYour charisma perks":
+    cancel event
+  if event-inventory's name contains "&6&lYour luck perks":
+    cancel event
+  if event-inventory's name contains "&8&lYour wisdom perks":
+    cancel event
   if event-inventory's name contains "’s abilities":
     cancel event
-    if event-inventory's name is "%player%’s abilities":
-      send "dd" to player
+    if event-inventory's name is "&6&l%player%’s abilities":
+      if name of clicked item is "&c&lDamage perks":
+        set {_gui} to a new chest inventory with 3 rows named "&c&lYour damage perks"
+        set {_slot} to 0
+        loop 27 times:
+          set slot {_slot} of {_gui} to red stained glass pane named  " "
+          add 1 to {_slot}
+        set slot 10 of {_gui} to {Sperkshead.1} named "&c&lCritical chance" with lore " " and "&cChance of &4%{critchance::%player%}%%% &cto" and "&cdeal critical strike" and "&7(2x normal damage)&c." and " " and "&cPerk level: %{critchance.lvl::%player%}%/100" and " " and "&fClick to use damage point &7(%{strength.pts::%player%}%)"
+        set slot 11 of {_gui} to {Sperkshead.2} named "&c&lHigher damage" with lore " " and "&cYour base damage is" and "&cincreased by &4%{bonusdmg::%player%}%&c." and " " and "&cPerk level: %{bonusdmg.lvl::%player%}%" and " " and "&fClick to use damage point &7(%{strength.pts::%player%}%)" 
+        if {strength::%player%} >= 10:
+          set slot 12 of {_gui} to {Sperkshead.3} named "&c&lHigher close damage" with lore " " and "&cYour close damage is" and "&cincreased by &4%{bonusclosedmg::%player%}%&c." and " " and "&cPerk level: %{bonusclosedmg.lvl::%player%}%" and " " and "&fClick to use damage point &7(%{strength.pts::%player%}%)" 
+        else:
+          set slot 12 of {_gui} to {Perkshead.0} named "&c&lDamage perk 3" with lore " " and "&cUnlocked on level 10" 
+        if {strength::%player%} >= 20:
+          set slot 13 of {_gui} to {Sperkshead.4} named "&c&lHigher range damage" with lore " " and "&cYour range damage is" and "&cincreased by &4%{bonusrangedmg::%player%}%&c." and " " and "&cPerk level: %{bonusrangedmg.lvl::%player%}%" and " " and "&fClick to use damage point &7(%{strength.pts::%player%}%)" 
+        else:
+          set slot 13 of {_gui} to {Perkshead.0} named "&c&lDamage perk 4" with lore " " and "&cUnlocked on level 20" 
+        if {strength::%player%} >= 30:
+          set slot 14 of {_gui} to {Sperkshead.5} named "&c&lFire damage" with lore " " and "&cYou have chance of &4%{firepercentdmg::%player%}%%% &cto deal" and "&cfire damage for 5 seconds" and "&cafter last given damage." and " " and "&cPerk level: %{firedmg.lvl::%player%}%/100" and " " and "&fClick to use &fdamage point &7(%{strength.pts::%player%}%)" 
+        else:
+          set slot 14 of {_gui} to {Perkshead.0} named "&c&lDamage perk 5" with lore " " and "&cUnlocked on level 30"  
+        if {strength::%player%} >= 40:
+          set slot 15 of {_gui} to {Sperkshead.6} named "&c&lSlow chance" with lore " " and "&cYou have chance of &4%{slowpercent::%player%}%%% &cto" and "&cslow enemy for 5 seconds after" and "&clast given damage." and " " and "&cPerk level: %{slow.lvl::%player%}%/100" and " " and "&fClick to use &fdamage point &7(%{strength.pts::%player%}%)" 
+        else:
+          set slot 15 of {_gui} to {Perkshead.0} named "&c&lDamage perk 6" with lore " " and "&cUnlocked on level 40" 
+        if {strength::%player%} >= 50:
+          set slot 16 of {_gui} to {Sperkshead.7} named "&c&lLife steal" with lore " " and "&cYou have chance of &4%{lifesteal::%player%}%%% &cto" and "&cheal yourself by attacking" and "&cenemies." and " " and "&cPerk level: %{lifesteal.lvl::%player%}%/100" and " " and "&fClick to use damage point &7(%{strength.pts::%player%}%)" 
+        else:
+          set slot 16 of {_gui} to {Perkshead.0} named "&c&lDamage perk 7" with lore " " and "&cUnlocked on level 50" 
+        open {_gui} to player
+        stop
+      if name of clicked item is "&a&lDefence perks":
+        set {_gui} to a new chest inventory with 3 rows named "&a&lYour defence perks"
+        set {_slot} to 0
+        loop 27 times:
+          set slot {_slot} of {_gui} to lime stained glass pane named  " "
+          add 1 to {_slot}
+        set slot 10 of {_gui} to {Dperkshead.1} named "&a&lDamage eater" with lore " " and "&aChance of &2%{defeater::%player%}%%% &ato" and "&aeat &21/2 &aof received damage." and " " and "&aPerk level: %{defeater.lvl::%player%}%/100" and " " and "&fClick to use damage point &7(%{defence.pts::%player%}%)"
+        set slot 11 of {_gui} to {Dperkshead.2} named "&a&lHigher defence" with lore " " and "&aYour base defence is" and "&aincreased by &2%{bonusdefence::%player%}%&a." and " " and "&aPerk level: %{defbonus.lvl::%player%}%" and " " and "&fClick to use damage point &7(%{defence.pts::%player%}%)"
+        if {defence::%player%} >= 10:
+          set slot 12 of {_gui} to {Dperkshead.3} named "&a&lDefence multiplier" with lore " " and "&aYour defence is multiplied" and "&aby &2%{defencemultiplier::%player%}%%%&a." and " " and "&aPerk level: %{defencemultiplier.lvl::%player%}%/100" and " " and "&fClick to use damage point &7(%{defence.pts::%player%}%)"
+        else:
+          set slot 12 of {_gui} to {Perkshead.0} named "&a&lDefence perk 3" with lore " " and "&aUnlocked on level 10" 
+        if {defence::%player%} >= 20:
+          set slot 13 of {_gui} to {Dperkshead.4} named "&a&lKnockback resistance" with lore " " and "&aChance of &2%{defknockback::%player%}%%% &ato" and "&ablock any knockback you recieved." and " " and "&aPerk level: %{defknockback.lvl::%player%}%/100" and " " and "&fClick to use damage point &7(%{defence.pts::%player%}%)"
+        else:
+          set slot 13 of {_gui} to {Perkshead.0} named "&a&lDefence perk 4" with lore " " and "&aUnlocked on level 20" 
+        if {defence::%player%} >= 30:
+          set slot 14 of {_gui} to {Dperkshead.5} named "&a&lThrow away chance" with lore " " and "&aChance of &2%{defthrow::%player%}%%% &ato" and "&athrow away your enemies" and  "&aafter taking damage." and " " and "&aPerk level: %{defthrow.lvl::%player%}%/100" and " " and "&fClick to use damage point &7(%{defence.pts::%player%}%)"
+        else:
+          set slot 14 of {_gui} to {Perkshead.0} named "&a&lDefence perk 5" with lore " " and "&aUnlocked on level 30" 
+        if {defence::%player%} >= 40:
+          set slot 15 of {_gui} to {Dperkshead.6} named "&a&lThorns" with lore " " and "&aChance of &2%{defthorns::%player%}%%% &ato" and "&adealing half of recieved damage" and "&aback to your attacker." and " " and "&aPerk level: %{defthorns.lvl::%player%}%/100" and " " and "&fClick to use damage point &7(%{defence.pts::%player%}%)" 
+        else:
+          set slot 15 of {_gui} to {Perkshead.0} named "&a&lDefence perk 6" with lore " " and "&aUnlocked on level 40" 
+        if {defence::%player%} >= 50:
+          set slot 16 of {_gui} to {Dperkshead.7} named "&a&lDodge chance" with lore " " and "&aChance of &2%{defdodge::%player%}%%% &ato" and "&ablock any damage you recieved." and " " and "&aPerk level: %{defdodge.lvl::%player%}%/100" and " " and "&fClick to use damage point &7(%{defence.pts::%player%}%)" 
+        else:
+          set slot 16 of {_gui} to {Perkshead.0} named "&a&lDefence perk 7" with lore " " and "&aUnlocked on level 50" 
+        open {_gui} to player
+        stop
+      if name of clicked item is "&b&lAgility perks":
+        set {_gui} to a new chest inventory with 3 rows named "&b&lYour agility perks"
+        set {_slot} to 0
+        loop 27 times:
+          set slot {_slot} of {_gui} to light blue stained glass pane named  " "
+          add 1 to {_slot}
+        set slot 10 of {_gui} to {Aperkshead.1} named "&b&lAgility perk 1" with lore " " and " " 
+        set slot 11 of {_gui} to {Aperkshead.2} named "&b&lAgility perk 2" with lore " " and " "
+        if {agility::%player%} >= 10:
+          set slot 12 of {_gui} to {Aperkshead.3} named "&b&lAgility perk 3" with lore " " and " " 
+        else:
+          set slot 12 of {_gui} to {Perkshead.0} named "&b&lAgility perk 3" with lore " " and " " 
+        if {agility::%player%} >= 20:
+          set slot 13 of {_gui} to {Aperkshead.4} named "&b&lAgility perk 4" with lore " " and " " 
+        else:
+          set slot 13 of {_gui} to {Perkshead.0} named "&b&lAgility perk 4" with lore " " and " " 
+        if {agility::%player%} >= 30:
+          set slot 14 of {_gui} to {Aperkshead.5} named "&b&lAgility perk 5" with lore " " and " " 
+        else:
+          set slot 14 of {_gui} to {Perkshead.0} named "&b&lAgility perk 5" with lore " " and " " 
+        if {agility::%player%} >= 40:
+          set slot 15 of {_gui} to {Aperkshead.6} named "&b&lAgility perk 6" with lore " " and " " 
+        else:
+          set slot 15 of {_gui} to {Perkshead.0} named "&b&lAgility perk 6" with lore " " and " " 
+        if {agility::%player%} >= 50:
+          set slot 16 of {_gui} to {Aperkshead.7} named "&b&lAgility perk 7" with lore " " and " " 
+        else:
+          set slot 16 of {_gui} to {Perkshead.0} named "&b&lAgility perk 7" with lore " " and " " 
+        open {_gui} to player
+        stop
+      if name of clicked item is "&d&lCharisma perks":
+        set {_gui} to a new chest inventory with 3 rows named "&d&lYour charisma perks"
+        set {_slot} to 0
+        loop 27 times:
+          set slot {_slot} of {_gui} to pink stained glass pane named  " "
+          add 1 to {_slot}
+        set slot 10 of {_gui} to {Cperkshead.1} named "&d&lCharisma perk 1" with lore " " and " " 
+        set slot 11 of {_gui} to {Cperkshead.2} named "&d&lCharisma perk 2" with lore " " and " "
+        if {charisma::%player%} >= 10:
+          set slot 12 of {_gui} to {Cperkshead.3} named "&d&lCharisma perk 3" with lore " " and " " 
+        else:
+          set slot 12 of {_gui} to {Perkshead.0} named "&d&lCharisma perk 3" with lore " " and " " 
+        if {charisma::%player%} >= 20:
+          set slot 13 of {_gui} to {Cperkshead.4} named "&d&lCharisma perk 4" with lore " " and " " 
+        else:
+          set slot 13 of {_gui} to {Perkshead.0} named "&d&lCharisma perk 4" with lore " " and " " 
+        if {charisma::%player%} >= 30:
+          set slot 14 of {_gui} to {Cperkshead.5} named "&d&lCharisma perk 5" with lore " " and " " 
+        else:
+          set slot 14 of {_gui} to {Perkshead.0} named "&d&lCharisma perk 5" with lore " " and " " 
+        if {charisma::%player%} >= 40:
+          set slot 15 of {_gui} to {Cperkshead.6} named "&d&lCharisma perk 6" with lore " " and " " 
+        else:
+          set slot 15 of {_gui} to {Perkshead.0} named "&d&lCharisma perk 6" with lore " " and " " 
+        if {charisma::%player%} >= 50:
+          set slot 16 of {_gui} to {Cperkshead.7} named "&d&lCharisma perk 7" with lore " " and " " 
+        else:
+          set slot 16 of {_gui} to {Perkshead.0} named "&d&lCharisma perk 7" with lore " " and " " 
+        open {_gui} to player
+        stop
+      if name of clicked item is "&6&lLuck perks":
+        set {_gui} to a new chest inventory with 3 rows named "&6&lYour luck perks"
+        set {_slot} to 0
+        loop 27 times:
+          set slot {_slot} of {_gui} to orange stained glass pane named  " "
+          add 1 to {_slot}
+        set slot 10 of {_gui} to {Lperkshead.1} named "&6&lLuck perk 1" with lore " " and " " 
+        set slot 11 of {_gui} to {Lperkshead.2} named "&6&lLuck perk 2" with lore " " and " "
+        if {luck::%player%} >= 10:
+          set slot 12 of {_gui} to {Lperkshead.3} named "&6&lLuck perk 3" with lore " " and " " 
+        else:
+          set slot 12 of {_gui} to {Perkshead.0} named "&6&lLuck perk 3" with lore " " and " " 
+        if {luck::%player%} >= 20:
+          set slot 13 of {_gui} to {Lperkshead.4} named "&6&lLuck perk 4" with lore " " and " " 
+        else:
+          set slot 13 of {_gui} to {Perkshead.0} named "&6&lLuck perk 4" with lore " " and " " 
+        if {luck::%player%} >= 30:
+          set slot 14 of {_gui} to {Lperkshead.5} named "&6&lLuck perk 5" with lore " " and " " 
+        else:
+          set slot 14 of {_gui} to {Perkshead.0} named "&6&lLuck perk 5" with lore " " and " " 
+        if {luck::%player%} >= 40:
+          set slot 15 of {_gui} to {Lperkshead.6} named "&6&lLuck perk 6" with lore " " and " " 
+        else:
+          set slot 15 of {_gui} to {Perkshead.0} named "&6&lLuck perk 6" with lore " " and " " 
+        if {luck::%player%} >= 50:
+          set slot 16 of {_gui} to {Lperkshead.7} named "&6&lLuck perk 7" with lore " " and " " 
+        else:
+          set slot 16 of {_gui} to {Perkshead.0} named "&6&lLuck perk 7" with lore " " and " " 
+        open {_gui} to player
+        stop
+      if name of clicked item is "&8&lWisdom perks":
+        set {_gui} to a new chest inventory with 3 rows named "&8&lYour wisdom perks"
+        set {_slot} to 0
+        loop 27 times:
+          set slot {_slot} of {_gui} to gray stained glass pane named  " "
+          add 1 to {_slot}
+        set slot 10 of {_gui} to {Wperkshead.1} named "&8&lWisdom perk 1" with lore " " and " " 
+        set slot 11 of {_gui} to {Wperkshead.2} named "&8&lWisdom perk 2" with lore " " and " "
+        if {wisdom::%player%} >= 10:
+          set slot 12 of {_gui} to {Wperkshead.3} named "&8&lWisdom perk 3" with lore " " and " " 
+        else:
+          set slot 12 of {_gui} to {Perkshead.0} named "&8&lWisdom perk 3" with lore " " and " " 
+        if {wisdom::%player%} >= 20:
+          set slot 13 of {_gui} to {Wperkshead.4} named "&8&lWisdom perk 4" with lore " " and " " 
+        else:
+          set slot 13 of {_gui} to {Perkshead.0} named "&8&lWisdom perk 4" with lore " " and " " 
+        if {wisdom::%player%} >= 30:
+          set slot 14 of {_gui} to {Wperkshead.5} named "&8&lWisdom perk 5" with lore " " and " " 
+        else:
+          set slot 14 of {_gui} to {Perkshead.0} named "&8&lWisdom perk 5" with lore " " and " " 
+        if {wisdom::%player%} >= 40:
+          set slot 15 of {_gui} to {Wperkshead.6} named "&8&lWisdom perk 6" with lore " " and " " 
+        else:
+          set slot 15 of {_gui} to {Perkshead.0} named "&8&lWisdom perk 6" with lore " " and " " 
+        if {wisdom::%player%} >= 50:
+          set slot 16 of {_gui} to {Wperkshead.7} named "&8&lWisdom perk 7" with lore " " and " " 
+        else:
+          set slot 16 of {_gui} to {Perkshead.0} named "&8&lWisdom perk 7" with lore " " and " " 
+        open {_gui} to player
+        stop
+

@@ -1,3 +1,0 @@
-command /parecek:
-  trigger:
-    send "%{mobs.Â§f1.defence}%" to all players

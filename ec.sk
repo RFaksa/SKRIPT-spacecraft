@@ -15,30 +15,35 @@ command /stash [<number>]:
       set slot {_slot} of {_gui} to {stash::%{_a}%::%{_slot}%::%player%}
       log "LOAD: %{_a}%::%{_slot}%::%{stash::%{_a}%::%{_slot}%::%player%}%" to "Logs/stash_%player%"
       add 1 to {_slot}
-    loop 18 times:
-      set slot {_slot} of {_gui} to purple stained glass pane named " "
+    loop 9 times:
+      set slot {_slot} of {_gui} to black stained glass pane named " "
+      add 1 to {_slot}
+    loop 9 times:
+      set slot {_slot} of {_gui} to light gray stained glass pane named " "
       add 1 to {_slot}
     if {_a} is not 1:
-      set slot 46 of {_gui} to green stained glass pane named "back"
+      set slot 46 of {_gui} to {stash::back} named "back"
     if {_a} is not 9:
-      set slot 52 of {_gui} to green stained glass pane named "next"
+      set slot 52 of {_gui} to {stash::next} named "next"
     close inventory of player
     open {_gui} to player
     stop
 
 on inventory click:
-  if inventory name of player's current inventory contains "&a%player%’s stash &2[":
-    if clicked slot is purple stained glass pane:
+  if event-inventory's name contains "&a%player%’s stash &2[":
+    if clicked slot is black stained glass pane:
+      cancel event
+    if clicked slot is light gray stained glass pane:
       cancel event
     if clicked slot is 46 or 52:
-      if clicked slot is green stained glass pane named "next":
+      if clicked slot is {stash::next}:
         cancel event
         set {_d} to name of player's current inventory
         replace all "&a%player%’s stash &2[" with "" in {_d}
         replace all "]" with "" in {_d}
         set {_d} to "%{_d}%" parsed as number
         make player execute command "/stash %({_d}+1)%"
-    if clicked slot is green stained glass pane named "back":
+    if clicked slot is {stash::back}:
       cancel event
       set {_d} to name of player's current inventory
       replace all "&a%player%’s stash &2[" with "" in {_d}
@@ -47,7 +52,7 @@ on inventory click:
       make player execute command "/stash %({_d}-1)%"
 
 on inventory close:
-  if inventory name of player's current inventory contains "&a%player%’s stash &2[":
+  if event-inventory's name contains "&a%player%’s stash &2[":
     play sound "block.barrel.close" with volume 2 to the player
     set {_d} to name of player's current inventory
     replace all "&a%player%’s stash &2[" with "" in {_d}

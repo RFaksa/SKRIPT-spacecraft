@@ -86,7 +86,7 @@ command /craft [<num>]:
       set slot 12 of {_gui} to white stained glass pane named "&7&n3"
       set slot 14 of {_gui} to white stained glass pane named "&7&n4"
       set slot 15 of {_gui} to white stained glass pane named "&7&n5"
-      set slot 16 of {_gui} to white stained glass pane named "&7&n3"
+      set slot 16 of {_gui} to white stained glass pane named "&7&n6"
       close inventory of player
       open {_gui} to player
       stop
@@ -129,7 +129,7 @@ command /craft [<num>]:
       stop
 
 command /learncraft <player> <num> <num>:
-  permission: space
+  permission: admin
   trigger:
     set {crafting::%arg-3%.%arg-1%::%arg-2%} to 1
     send title "&a&l+knowledge" with subtitle "&eLeaned: %{crafting.%arg-3%.%arg-2%::name}%" to arg-1 for 5 seconds

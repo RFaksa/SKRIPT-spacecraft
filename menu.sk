@@ -3,23 +3,27 @@ command /menu:
     set {_gui} to a new chest inventory with 3 rows named "&d&l%player%’s menu"
     set {_slot} to 0
     loop 27 times:
-      set slot {_slot} of {_gui} to pink stained glass pane with nbt "{Unbreakable:1b,HideFlags:6}" named  " "
+      set slot {_slot} of {_gui} to pink stained glass pane named  " "
       add 1 to {_slot}
-    set slot 4 of {_gui} to skull of ("%player%" parsed as an offline player) named "&d&l%player%’s statistics" with lore " " and "&cKills: &4%{kills::%player%}%" and "&aMobs killed: &2%{mobskilled::%player%}%" and "&7Deaths: &8%{deaths::%player%}%" and " " and "&bVisited planets: &3%{planets::%player%}%"
+    set {_cd} to "%((1+{defencearmor::%player%}*0.01+{bonusdefence::%player%}*0.01)*(1+{defencemultiplier::%player%}*0.01))*100%"
+    set {_ab} to "%({bonusclosedmg::%player%}+{bonusdmg::%player%})%"
+    set {_ef} to "%({bonusrangedmg::%player%}+{bonusdmg::%player%})%" 
+    set slot 4 of {_gui} to skull of ("%player%" parsed as an offline player) named "&d&l%player%’s statistics" with lore " " and "&cKills: &4%{kills::%player%}%" and "&aMobs killed: &2%{mobskilled::%player%}%" and "&7Deaths: &8%{deaths::%player%}%" and " " and "&bVisited planets: &3%{planets::%player%}%" and "&7&m-------------" and "&4Strength: &c%{_ab}%&7/&c%{_ef}%" and "&aDefence: &2%{_cd}%" and "Speed: "
     set slot 22 of {_gui} to filled map named "&6&lSpace map" with lore " " and "&7Space map allows you to set up" and "&7your next travel destination..." and " " and "&6[Premium feature]" and " "  and "&e→ &a&nClick&7 to open space map"
     set slot 12 of {_gui} to diamond named "&a&lFriends" with lore " " and "&7Who would like to play all" and "&7alone?" and "&7Add some friends!" and " " and "&e→ &a&nClick&7 to open friend menu"
     set slot 13 of {_gui} to {menuchest1} named "&f&lCollector's album" with lore " " and "&7An album is a collection of all" and "&7your memories and achievements" and "&7you have achieved…" and " " and "&e→ &a&nClick&7 to open your collection"
     set slot 14 of {_gui} to {menuchest6} named "&b&lStash" with lore " " and "&7Your main repository for" and "&7all your stuff..." and " " and "&e→ &a&nClick&7 to open stash"
     set slot 15 of {_gui} to {menuchest2} named "&5&lPotion bag" with lore " " and "&7A place to store your" and "&7special potions..." and " " and "&e→ &a&nClick&7 to open potion bag"
     set slot 17 of {_gui} to {menuchest5} named "&9&lJukebox" with lore " " and "&7Play any minecraft song" and "&7anytime and anywhere..." and " " and "&e→ &a&nClick&7 to open jukebox"
-    set slot 21 of {_gui} to scute named "&3&lTeleport to your ship" with lore " " and "&7Fast way how to get" and "&7back to your spaceship" and " " and "&6[Premium feature]" and " " and "&e→ &a&nClick&7 to teleport to your ship" and " " and "&b[You need at least 3 fuels in" and "&bthe engine...]"
+    set slot 21 of {_gui} to scute named "&3&lTeleport to your ship" with lore " " and "&7Fast way how to get back" and "&7to your spaceship..." and " " and "&6[Premium feature]" and " " and "&e→ &a&nClick&7 to teleport to your ship"
     set slot 11 of {_gui} to end crystal named "&c&lAbilities" with lore " " and "&7The level of your skills is" and "&7reflected in the characteristics" and "&7of your character..." and " " and "&e→ &a&nClick&7 to teleport to see abilities"
     set slot 23 of {_gui} to {menuchest3} named "&e&lWorkbench" with lore " " and "&7A very professional table," and "&7but it still needs your" and "&7knowledge..." and " " and "&6[Premium feature]" and " " and "&e→ &a&nClick&7 to open workbench"
     set slot 26 of {_gui} to {menuchest4} named "&8&lTrash" with lore " " and "&8Maybe if you search hard" and "&8you will find some" and "&8dead minecraft servers..." and " " and "&e→ &a&nClick&7 to open trash can"
     open {_gui} to player
     stop
 
-command /loadd <text>:
+command /load <text>:
+  permission: admin
   trigger:
     set {%arg-1%} to tool of player
 on inventory click:
@@ -54,4 +58,4 @@ on inventory click:
       make player execute command "/trash"
     if name of clicked item is "&9&lJukebox":
       close inventory of player
-      make player execute command "/music"
+      make player execute command "/songs"

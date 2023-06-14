@@ -13,7 +13,7 @@ command /potionbag:
     set {_a} to 0
     loop 27 times:
       if {potionbag::%player%::%{_a}%} is 1:
-        set slot {_slot} of {_gui} to light gray stained glass pane with nbt "{Unbreakable:1b,HideFlags:6}" named  " "
+        set slot {_slot} of {_gui} to light gray stained glass pane named  " "
         add 1 to {_slot}
       if {potionbag::%player%::%{_a}%} is "strength potion1":
         set slot {_slot} of {_gui} to {potionbag.1}
@@ -31,7 +31,7 @@ command /potionbag:
     open {_gui} to player
     stop
 on inventory click:
-  if inventory name of current inventory of player contains "&6&lPotion bag":
+  if event-inventory's name contains "&6&lPotion bag":
     cancel event
     set {_i} to clicked slot
     if {_i} is {potionbag.1}:
@@ -39,6 +39,7 @@ on inventory click:
       set {potionbag::%player%::%index of event-slot%} to 1
       remove strength from player's active potion effects
       apply potion of strength of tier 1 to player for 480 seconds
+      stop
     if {_i} is {potionbag.5}:
       loop {potionbag::%player%::*}:
         if loop-value is 1:
@@ -52,6 +53,7 @@ on inventory click:
       set {potionbag::%player%::%index of event-slot%} to 1
       remove speed from player's active potion effects
       apply potion of speed of tier 1 to player for 480 seconds
+      stop
     if {_i} is {potionbag.6}:
       loop {potionbag::%player%::*}:
         if loop-value is 1:
@@ -65,6 +67,7 @@ on inventory click:
       set {potionbag::%player%::%index of event-slot%} to 1
       remove strength from player's active potion effects
       apply potion of strength of tier 2 to player for 90 seconds
+      stop
     if {_i} is {potionbag.7}:
       loop {potionbag::%player%::*}:
         if loop-value is 1:
@@ -78,6 +81,7 @@ on inventory click:
       set {potionbag::%player%::%index of event-slot%} to 1
       remove speed from player's active potion effects
       apply potion of speed of tier 2 to player for 90 seconds
+      stop
     if {_i} is {potionbag.8}:
       loop {potionbag::%player%::*}:
         if loop-value is 1:
@@ -86,11 +90,3 @@ on inventory click:
           close inventory of player
           make player execute command "/potionbag"
           stop 
-
-command /load [<text>]:
-  trigger:
-    if player is not "TheDarkLord173":
-      stop
-    set {_a} to arg-1
-    set {potionbag.%{_a}%} to tool of player
-

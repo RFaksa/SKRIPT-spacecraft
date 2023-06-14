@@ -1,9 +1,276 @@
+on load:
+    set {tutorial.position.1} to location at (-195, 100, -152) in world "pindour"
+    set {tutorial.position.2} to location at (-170, 80, -120) in world "pindour"
+    set {tutorial.position.3} to location at (-211, 85, -180) in world "pindour"
+    set {tutorial.position.4} to location at (-209, 87, -182) in world "pindour"
+    set {tutorial.position.5} to location at (-182, 90, -137) in world "pindour"
+    set {tutorial.position.6} to location at (-192, 83, -128) in world "pindour"
+    set {tutorial.position.7} to location at (-175, 91, -140) in world "pindour"
+    set {tutorial.position.8} to location at (-163, 84, -129) in world "pindour"
+    set {tutorial.position.9} to location at (-175, 89, -129) in world "pindour"
+    set {tutorial.position.10} to location at (-185, 84, -116) in world "pindour"
+    set {tutorial.position.11} to location at (-189, 87, -126) in world "pindour"
+    set {tutorial.position.12} to location at (-202, 83, -136) in world "pindour"
+    set {tutorial.position.13} to location at (-202, 83, -136) in world "pindour"
+
+
+
+#dodělat invis
+
 command /tutorial [<text>]:
   trigger:
-    if {tutorial::%player%} is set:
+    if {tutorial::%player%} is "done":
       send "&cYou have already done the tutorial."
       stop
     if arg-1 is "skip":
-      set {tutorial::%player%} to "skip"
+      set {tutorial::%player%} to "done"
       execute console command "/pex user %player% add space.ship"
       make player execute command "/s create"
+on join:
+  if {tutorial::%player%} is not set:
+    teleport player to spawn
+    wait 2 seconds
+    apply blindness to the player for 10 seconds
+    apply slowness 2 to the player for 20 minutes
+    make player see block at location (-210, 85, -180) in world "pindour" as green stained glass
+    make player see block at location (-211, 85, -181) in world "pindour" as green stained glass
+    make player see block at location (-211, 85, -180) in world "pindour" as green stained glass
+    wait 3 seconds
+    send "&c&l%player%: Aggggh my head" to player
+    loop 5 times:
+      if {tutorial::%player%} is not set:
+        make 5 of item particle using redstone at location of player with extra 0.5
+        wait 1 seconds
+        if player is not online:
+          exit loop
+      else:
+        exit loop
+    send "&c&l%player%: I should find a way out of this..." to player
+    wipe player's sidebar
+    set name of sidebar of player to "&7&lSpaceCraft"
+    set score "&6&lYour tasks:" in sidebar of player to 4
+    set score "&61.) &eFind a way out" in sidebar of player to 3
+    set score "&6 &e  " in sidebar of player to 2
+    set score "&7&m--------------------------" in sidebar of player to 1
+  if {tutorial::%player%} is "step1":
+    wipe player's sidebar
+    set name of sidebar of player to "&7&lSpaceCraft"
+    set score "&6&lYour tasks:" in sidebar of player to 4
+    set score "&6  1.) &eFollow the way of &cblood" in sidebar of player to 3
+    set score "&6 &e  " in sidebar of player to 2
+    set score "&7&m--------------------------" in sidebar of player to 1
+  if {tutorial::%player%} is "step2":
+    wipe player's sidebar
+    set name of sidebar of player to "&7&lSpaceCraft"
+    set score "&6&lYour tasks:" in sidebar of player to 5
+    set score "&6  1.) &eInspect the &4&ldead body" in sidebar of player to 4
+    set score "&6  2.) &eFind out &awhat happened" in sidebar of player to 3
+    set score "&6 &e  " in sidebar of player to 2
+    set score "&7&m--------------------------" in sidebar of player to 1
+  if {tutorial::%player%} is "step3": 
+    wipe player's sidebar
+    set name of sidebar of player to "&7&lSpaceCraft"
+    set score "&6&lYour tasks:" in sidebar of player to 4
+    set score "&6  1.) &eFind out &awhat happened" in sidebar of player to 3
+    set score "&6 &e  " in sidebar of player to 2
+    set score "&7&m--------------------------" in sidebar of player to 1
+    wait 3 seconds
+    send "&c&l%player%: He probably won't need this anymore..." to player
+  if {tutorial::%player%} is "step4": 
+    set name of sidebar of player to "&7&lSpaceCraft"
+    set score "&6&lYour tasks:" in sidebar of player to 4
+    set score "&6  1.) &eTry to knock the doors. &7(%{tutorial.number::%player%}%/3)" in sidebar of player to 3
+    set score "&6 &e  " in sidebar of player to 2
+    set score "&7&m--------------------------" in sidebar of player to 1
+
+on any movement:
+  if {tutorial::%player%} is not set:
+    if player is within location of {tutorial.position.3} and {tutorial.position.4}:
+      set {tutorial::%player%} to "step1"  
+      send "&c&l%player%: IDK what happened but I should follow the way of blood..." to player
+      wait 3 seconds
+      send "&c&l%player%: The WAY OF BLOOD?!?" to player
+      wait 2 second
+      send "&c&l%player%: &2&lUGgggH" to player
+      make 50 of block particle using green_concrete at location of target block with extra 0.5
+      play sound "minecraft:entity.zombie.death" with volume 2 to the player
+      wipe player's sidebar
+      set name of sidebar of player to "&6&lYour task:"
+      set score "&61.) &eFollow the way of &cblood" in sidebar of player to 7
+      set score "&7&m--------------------------" in sidebar of player to 6
+  if {tutorial::%player%} is "step1":
+    if player is within location of {tutorial.position.1} and {tutorial.position.2}:
+      set {tutorial::%player%} to "step2"
+      send "&c&l%player%: &2&lUGgggH" to player
+      make 50 of block particle using green_concrete at location of target block with extra 0.5
+      play sound "minecraft:entity.zombie.death" with volume 2 to the player
+      wait 3 second
+      send "&c&l%player%: &4&lDEAD MAN ?!##¿" to player
+      wipe player's sidebar
+      set name of sidebar of player to "&7&lSpaceCraft"
+      set score "&6&lYour tasks:" in sidebar of player to 5
+      set score "&6  1.) &eInspect the &4dead body" in sidebar of player to 4
+      set score "&6  2.) &eFind out &awhat happened" in sidebar of player to 3
+      set score "&6 &e  " in sidebar of player to 2
+      set score "&7&m--------------------------" in sidebar of player to 1
+  if {tutorial::%player%} is "step3":
+    if player is within location of {tutorial.position.5} and {tutorial.position.6}:
+      set {tutorial::%player%} to "step4"
+      wait 3 second
+      send "&c&l%player%: Maybe I should knock the doors." to player
+      wipe player's sidebar
+      set name of sidebar of player to "&7&lSpaceCraft"
+      set {tutorial.number::%player%} to 0
+      set score "&6&lYour tasks:" in sidebar of player to 4
+      set score "&6  1.) &eTry to knock the doors. &7(%{tutorial.number::%player%}%/3)" in sidebar of player to 3
+      set score "&6 &e  " in sidebar of player to 2
+      set score "&7&m--------------------------" in sidebar of player to 1
+
+on right click on birch doors:
+  if player is in world "pindour":
+    cancel event
+  if {tutorial.number::%player%} is not set:
+    stop
+  if {tutorial::%player%} is "step4":
+    if player is within location of {tutorial.position.7} and {tutorial.position.8}:
+      if {tutorial.door1::%player%} is set:
+        stop
+      else:
+        set {tutorial.door1::%player%} to 1
+        add 1 to {tutorial.number::%player%}
+        wipe player's sidebar
+        set name of sidebar of player to "&7&lSpaceCraft"
+        set score "&6&lYour tasks:" in sidebar of player to 4
+        set score "&6  1.) &eTry to knock the doors. &7(%{tutorial.number::%player%}%/3)" in sidebar of player to 3
+        set score "&6 &e  " in sidebar of player to 2
+        set score "&7&m--------------------------" in sidebar of player to 1
+        loop 5 times:
+          play sound "minecraft:block.wooden_button.click_off" with volume 2 to the player
+          wait 3 ticks
+        if {tutorial.number::%player%} is 3:
+          set {tutorial::%player%} to "step5"
+          wipe player's sidebar
+          delete {tutorial.number::%player%}
+          delete {tutorial.door1::%player%}
+          delete {tutorial.door2::%player%}
+          delete {tutorial.door3::%player%}
+          wait 1 second
+          play sound "minecraft:entity.villager.hurt" with volume 2 to the player
+          wait 2 seconds
+          apply blindness 5 to the player
+          apply slowness 5 to the player
+          teleport player to {tutorial.position.13}
+    if player is within location of {tutorial.position.9} and {tutorial.position.10}:
+      if {tutorial.door2::%player%} is set:
+        stop
+      else:
+        set {tutorial.door2::%player%} to 1
+        add 1 to {tutorial.number::%player%}
+        wipe player's sidebar
+        set name of sidebar of player to "&7&lSpaceCraft"
+        set score "&6&lYour tasks:" in sidebar of player to 4
+        set score "&6  1.) &eTry to knock the doors. &7(%{tutorial.number::%player%}%/3)" in sidebar of player to 3
+        set score "&6 &e  " in sidebar of player to 2
+        set score "&7&m--------------------------" in sidebar of player to 1
+        loop 5 times:
+          play sound "minecraft:block.wooden_button.click_off" with volume 2 to the player
+          wait 3 ticks
+        if {tutorial.number::%player%} is 3:
+          set {tutorial::%player%} to "step5"
+          wipe player's sidebar
+          delete {tutorial.number::%player%}
+          delete {tutorial.door1::%player%}
+          delete {tutorial.door2::%player%}
+          delete {tutorial.door3::%player%}
+          wait 1 second
+          play sound "minecraft:entity.villager.hurt" with volume 2 to the player
+          wait 2 seconds
+          apply blindness 5 to the player
+          apply slowness 5 to the player
+          teleport player to {tutorial.position.13}
+    if player is within location of {tutorial.position.11} and {tutorial.position.12}:
+      if {tutorial.door3::%player%} is set:
+        stop
+      else:
+        set {tutorial.door3::%player%} to 1
+        add 1 to {tutorial.number::%player%}
+        wipe player's sidebar
+        set name of sidebar of player to "&7&lSpaceCraft"
+        set score "&6&lYour tasks:" in sidebar of player to 4
+        set score "&6  1.) &eTry to knock the doors. &7(%{tutorial.number::%player%}%/3)" in sidebar of player to 3
+        set score "&6 &e  " in sidebar of player to 2
+        set score "&7&m--------------------------" in sidebar of player to 1
+        loop 5 times:
+          play sound "minecraft:block.wooden_button.click_off" with volume 2 to the player
+          wait 3 ticks
+        if {tutorial.number::%player%} is 3:
+          set {tutorial::%player%} to "step5"
+          wipe player's sidebar
+          delete {tutorial.number::%player%}
+          delete {tutorial.door1::%player%}
+          delete {tutorial.door2::%player%}
+          delete {tutorial.door3::%player%}
+          wait 1 second
+          play sound "minecraft:entity.villager.hurt" with volume 2 to the player
+          wait 2 seconds
+          apply blindness 5 to the player
+          apply slowness 5 to the player
+          teleport player to {tutorial.position.13}
+on damage:
+  if {tutorial::%attacker%} is "step2":
+    if victim is armor stand:
+      if attacker is within location of {tutorial.position.1} and {tutorial.position.2}:
+        send "&c&l%attacker%: Aggggh" to attacker
+        set {_gui} to a new chest inventory with 6 rows named "§4§lDEAD BODY &c- click to inspect"
+        set {_gui.slot} to 0
+        loop 54 times:
+          set {_d} to blue stained glass pane or light blue stained glass pane or cyan stained glass pane or white stained glass pane
+          set slot {_gui.slot} of {_gui} to {_d} named " "
+          add 1 to {_gui.slot}
+        set slot 4 of {_gui} to red stained glass pane named " "
+        set slot 14 of {_gui} to red stained glass pane named " "
+        set slot 12 of {_gui} to red stained glass pane named " "
+        set slot 11 of {_gui} to red stained glass pane named " "
+        set slot 21 of {_gui} to red stained glass pane named " "
+        set slot 23 of {_gui} to red stained glass pane named " "
+        set slot 24 of {_gui} to stone sword named "&eIvory dagger" with lore "&5Click to interact"
+        set slot 25 of {_gui} to red stained glass pane named " "
+        set slot 30 of {_gui} to red stained glass pane named " "
+        set slot 32 of {_gui} to red stained glass pane named " "
+        set slot 33 of {_gui} to red stained glass pane named " "
+        set slot 39 of {_gui} to red stained glass pane named " "
+        set slot 37 of {_gui} to red stained glass pane named " "
+        set slot 41 of {_gui} to red stained glass pane named " "
+        set slot 49 of {_gui} to red stained glass pane named " "
+        set slot 13 of {_gui} to {tutorial.helmet} named " "
+        set slot 22 of {_gui} to iron chestplate named " "
+        set slot 31 of {_gui} to iron leggings named " "
+        set slot 40 of {_gui} to iron boots named " "
+        close inventory of attacker
+        open {_gui} to attacker
+        stop
+
+
+on inventory click:
+  if event-inventory's name contains "§4§lDEAD BODY &c- click to inspect":
+    cancel event
+    if clicked slot is 24:
+      set {tutorial::%player%} to "step3"
+      close inventory of player
+      give 1 stone sword named "&eIvory dagger" with lore "&7Rarity: &arare" and "&cDamage: 5" to player
+      wipe player's sidebar
+      set name of sidebar of player to "&7&lSpaceCraft"
+      set score "&6&lYour tasks:" in sidebar of player to 4
+      set score "&6  1.) &eFind out &awhat happened" in sidebar of player to 3
+      set score "&6 &e  " in sidebar of player to 2
+      set score "&7&m--------------------------" in sidebar of player to 1
+      wait 3 seconds
+      send "&c&l%player%: He probably won't need this anymore..." to player
+      
+
+
+
+
+
+
+

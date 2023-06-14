@@ -1,41 +1,66 @@
 on first join:
   set {_time} to now
   log "[%IP of player%] %player%" to "Logs/joined-players"
-  set {_p} to player
-  set {deaths::%{_p}%} to 0
-  set {kills::%{_p}%} to 0
-  set {planets::%{_p}%} to 0
-  set {mobskilled::%{_p}%} to 0
   if {strength::%{_p}%} is not set:
+    set {_p} to player
+    set {defeater::%{_p}%} to 0
+    set {defeater.lvl::%{_p}%} to 0
+    set {bonusdefence::%{_p}%} to 0
+    set {defbonus.lvl::%{_p}%} to 0
+    set {defencemultiplier::%{_p}%} to 0
+    set {defencemultiplier.lvl::%{_p}%} to 0
+    set {defknockback::%{_p}%} to 0
+    set {defknockback.lvl::%{_p}%} to 0
+    set {defthrow::%{_p}%} to 0
+    set {defthrow.lvl::%{_p}%} to 0
+    set {defthorns::%{_p}%} to 0
+    set {defthorns.lvl::%{_p}%} to 0
+    set {defdodge::%{_p}%} to 0
+    set {defdodge.lvl::%{_p}%} to 0
+    set {critchance::%{_p}%} to 0
+    set {critchance.lvl::%{_p}%} to 0
+    set {bonusdmg::%{_p}%} to 0
+    set {bonusdmg.lvl::%{_p}%} to 0
+    set {bonusclosedmg::%{_p}%} to 0
+    set {bonusclosedmg.lvl::%{_p}%} to 0
+    set {bonusrangedmg::%{_p}%} to 0
+    set {bonusrangedmg.lvl::%{_p}%} to 0
+    set {firepercentdmg::%{_p}%} to 0
+    set {firedmg::%{_p}%} to 0
+    set {firedmg.lvl::%{_p}%} to 0
+    set {slowpercent::%{_p}%} to 0
+    set {slow.lvl::%{_p}%} to 0
+    set {lifesteal::%{_p}%} to 0
+    set {lifesteal.lvl::%{_p}%} to 0
+    set {deaths::%{_p}%} to 0
+    set {kills::%{_p}%} to 0
+    set {planets::%{_p}%} to 0
+    set {mobskilled::%{_p}%} to 0
     set {strength::%{_p}%} to 0
     set {strength.xp::%{_p}%} to 0
-    set {strength.xpneed::%{_p}%} to 100
+    set {strength.xpneed::%{_p}%} to 3500
     set {strength.pts::%{_p}%} to 0
-  if {defence.stat::%{_p}%} is not set:
     set {defence::%{_p}%} to 0
     set {defence.xp::%{_p}%} to 0
-    set {defence.xpneed::%{_p}%} to 10
+    set {defence.xpneed::%{_p}%} to 25
     set {defence.pts::%{_p}%} to 0
-  if {agility::%{_p}%} is not set:
     set {agility::%{_p}%} to 0
     set {agility.xp::%{_p}%} to 0
     set {agility.xpneed::%{_p}%} to 1
     set {agility.pts::%{_p}%} to 0
-  if {charisma::%{_p}%} is not set:
     set {charisma::%{_p}%} to 0
     set {charisma.xp::%{_p}%} to 0
     set {charisma.xpneed::%{_p}%} to 1
     set {charisma.pts::%{_p}%} to 0
-  if {luck::%{_p}%} is not set:
     set {luck::%{_p}%} to 0
     set {luck.xp::%{_p}%} to 0
     set {luck.xpneed::%{_p}%} to 100
     set {luck.pts::%{_p}%} to 0
-  if {wisdom::%{_p}%} is not set:
     set {wisdom::%{_p}%} to 0
     set {wisdom.xp::%{_p}%} to 0
     set {wisdom.xpneed::%{_p}%} to 1
     set {wisdom.pts::%{_p}%} to 0
+    set {playtime::%{_p}%} to 0
 
 on death of player:
 	add 1 to {deaths.%victim%}
@@ -43,9 +68,10 @@ on death of player:
 		add 1 to {kills.%attacker%}
 on join:
 #  execute console command "gamemode 2 %player%"
-  set {ship.music::%player%} to "not-playing"
-  set slot 8 of player to {menubook} named "&b&a&8&7&e&d&l%player%’s menu" with lore " " and "&7Your very own menu with" and "&7many important stuff in it!" and " " and "&e→ &a&nRight-click&7 to open"
-  play sound "ui.toast.challenge_complete" with volume 2 to the player
+  if {tutorial::%player%} is "done":
+    set {ship.music::%player%} to "not-playing"
+    set slot 8 of player to {menubook} named "&b&a&8&7&e&d&l%player%’s menu" with lore " " and "&7Your very own menu with" and "&7many important stuff in it!" and " " and "&e→ &a&nRight-click&7 to open"
+    play sound "ui.toast.challenge_complete" with volume 2 to the player
 
 on right click:
   if name of event-item is "&d&l%player%’s menu": 
@@ -68,19 +94,52 @@ on swapping of held item:
 
 
 command /testicek:
+ # permission: admin
   trigger:
     set {_p} to player
     if {_p} is set:
+      set {playtime::%{_p}%} to 0
+      set {defeater::%{_p}%} to 0
+      set {defeater.lvl::%{_p}%} to 0
+      set {bonusdefence::%{_p}%} to 0
+      set {defbonus.lvl::%{_p}%} to 0
+      set {defencemultiplier::%{_p}%} to 0
+      set {defencemultiplier.lvl::%{_p}%} to 0
+      set {defknockback::%{_p}%} to 0
+      set {defknockback.lvl::%{_p}%} to 0
+      set {defthrow::%{_p}%} to 0
+      set {defthrow.lvl::%{_p}%} to 0
+      set {defthorns::%{_p}%} to 0
+      set {defthorns.lvl::%{_p}%} to 0
+      set {defdodge::%{_p}%} to 0
+      set {defdodge.lvl::%{_p}%} to 0
+      set {critchance::%{_p}%} to 0
+      set {critchance.lvl::%{_p}%} to 0
+      set {strength.pts::%{_p}%} to 1000
+      set {bonusdmg::%{_p}%} to 0
+      set {bonusdmg.lvl::%{_p}%} to 0
+      set {bonusclosedmg::%{_p}%} to 10
+      set {bonusclosedmg.lvl::%{_p}%} to 10
+      set {bonusrangedmg::%{_p}%} to 15
+      set {bonusrangedmg.lvl::%{_p}%} to 0
+      set {firepercentdmg::%{_p}%} to 0
+      set {firedmg::%{_p}%} to 0
+      set {firedmg.lvl::%{_p}%} to 0
+      set {slowpercent::%{_p}%} to 0
+      set {slow.lvl::%{_p}%} to 0
+      set {lifesteal::%{_p}%} to 0
+      set {lifesteal.lvl::%{_p}%} to 0
+      set {defence.pppe::%{_p}%} to 0
+      set {strength.pppe::%{_p}%} to 0
       set {kills::%{_p}%} to 0
       set {mobskilled::%{_p}%} to 0
       set {deaths::%{_p}%} to 0
-      set {strength::%{_p}%} to 0
+      set {strength::%{_p}%} to 100
       set {strength.xp::%{_p}%} to 0
-      set {strength.xpneed::%{_p}%} to 100
-      set {strength.pts::%{_p}%} to 0
+      set {strength.xpneed::%{_p}%} to 3500
       set {defence::%{_p}%} to 0
       set {defence.xp::%{_p}%} to 0
-      set {defence.xpneed::%{_p}%} to 10
+      set {defence.xpneed::%{_p}%} to 25
       set {defence.pts::%{_p}%} to 0
       set {agility::%{_p}%} to 0
       set {agility.xp::%{_p}%} to 0
@@ -98,3 +157,15 @@ command /testicek:
       set {wisdom.xp::%{_p}%} to 0
       set {wisdom.xpneed::%{_p}%} to 0
       set {wisdom.pts::%{_p}%} to 0
+      delete {tutorial::%{_p}%}
+      delete {tutorial.number::%player%}
+      delete {tutorial.door1::%player%}
+      delete {tutorial.door2::%player%}
+      delete {tutorial.door3::%player%}
+
+command /playtime:
+  trigger:
+    send "%player's time played%" to player
+
+
+

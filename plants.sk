@@ -29,7 +29,7 @@ on right click:
 				set block at location at {ship.build.location.X::%player%}, 61, {ship.build.location.Z::%player%} in world "void" to air
 				give 1 rose bush named "&aClimbing rose bush" with lore " " and "&bRandom fact:" and "&7Climbing rose bushes" and "&7can rise anywhere." and " " and "&eWorkbench materials" to player
 
-every 10 minutes:
+every 10 seconds:
 	loop all players:
 		if {ship.gui.flower.water::%loop-player%} is "true":
 			set {ship.build.location.X::%loop-player%} to ({ship.location.X::%loop-player%}+2)

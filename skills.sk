@@ -1,15 +1,15 @@
 #vyresit unbreakable itemy na mobky
 on load:
 
-  set {mobs.1.tool} to gold sword named "1" with nbt "{Unbreakable:1b}" #most important setting mobs id
+#  set {mobs.1.tool} to gold sword named "1" with nbt "{Unbreakable:1b}" #most important setting mobs id
   set {mobs.1.mob} to "zombie"
   set {mobs.1.name} to "&6&lGold Horder"
   set {mobs.1.hp} to 300 #hearts
   set {mobs.1.maxhp} to 300 #hearts
-  set {mobs.1.equip1} to gold block with nbt "{Unbreakable:1}"
-  set {mobs.1.equip2} to gold chestplate with nbt "{Unbreakable:1}"
-  set {mobs.1.equip3} to gold leggings with nbt "{Unbreakable:1}"
-  set {mobs.1.equip4} to gold boots with nbt "{Unbreakable:1}"
+#  set {mobs.1.equip1} to gold block with nbt "{Unbreakable:1}"
+#  set {mobs.1.equip2} to gold chestplate with nbt "{Unbreakable:1}"
+#  set {mobs.1.equip3} to gold leggings with nbt "{Unbreakable:1}"
+#  set {mobs.1.equip4} to gold boots with nbt "{Unbreakable:1}"
   set {mobs.1.skill.chance} to 50%
   set {mobs.1.defence} to 1
   set {mobs.1.dodgechance} to 50%
@@ -22,33 +22,33 @@ on load:
   set {mobs.1.drop::4} to diamond hoe named "AK-47" with lore "&cDamage: 60" and "&eRange: 23" and "&6Reload time: 0.1"
   set {mobs.1.drop.chance.4} to 0.1%
 
-  set {mobs.2.tool} to diamond sword named "2" with nbt "{Unbreakable:1b}"
+#  set {mobs.2.tool} to diamond sword named "2" with nbt "{Unbreakable:1b}"
   set {mobs.2.mob} to "skeleton"
   set {mobs.2.name} to "&b&lDiamond Horder"
   set {mobs.2.hp} to 3000000 #hearts
   set {mobs.2.maxhp} to 3000000 #hearts
-  set {mobs.2.equip1} to diamond block with nbt "{Unbreakable:1b}"
-  set {mobs.2.equip2} to diamond chestplate with nbt "{Unbreakable:1b}"
-  set {mobs.2.equip3} to diamond leggings with nbt "{Unbreakable:1b}"
-  set {mobs.2.equip4} to diamond boots with nbt "{Unbreakable:1b}"
+#  set {mobs.2.equip1} to diamond block with nbt "{Unbreakable:1b}"
+#  set {mobs.2.equip2} to diamond chestplate with nbt "{Unbreakable:1b}"
+#  set {mobs.2.equip3} to diamond leggings with nbt "{Unbreakable:1b}"
+#  set {mobs.2.equip4} to diamond boots with nbt "{Unbreakable:1b}"
   set {mobs.2.defence} to 0.001
   set {mobs.2.dodgechance} to 15%
   
-  set {mobs.3.tool} to unbreakable Iron Block named "3"
+#  set {mobs.3.tool} to unbreakable Iron Block named "3"
   set {mobs.3.mob} to "enderman"
   set {mobs.3.name} to "&5&lZZZZ"
   set {mobs.3.hp} to 3000 #hearts
   set {mobs.3.maxhp} to 3000 #hearts
-  set {mobs.3.equip1} to diamond block with nbt "{Unbreakable:1b}"
-  set {mobs.3.equip2} to diamond chestplate with nbt "{Unbreakable:1b}"
-  set {mobs.3.equip3} to diamond leggings with nbt "{Unbreakable:1b}"
-  set {mobs.3.equip4} to diamond boots with nbt "{Unbreakable:1b}"
+#  set {mobs.3.equip1} to diamond block with nbt "{Unbreakable:1b}"
+#  set {mobs.3.equip2} to diamond chestplate with nbt "{Unbreakable:1b}"
+#  set {mobs.3.equip3} to diamond leggings with nbt "{Unbreakable:1b}"
+#  set {mobs.3.equip4} to diamond boots with nbt "{Unbreakable:1b}"
   set {mobs.3.defence} to 0.01
   set {mobs.3.dodgechance} to 15%
 
 
 command /mob <text>:
-  permission: *.*
+  permission: admin
   trigger:
     if arg-1 is set:
       if {mobs.%arg-1%.mob} is "zombie":
@@ -69,29 +69,85 @@ command /mob <text>:
       
 
 on damage:
-  if victim is item frame:
+  if victim is item frame or armor stand:
     stop
   if victim is player:
     if attacker is entity:
-      set {_damage} to "%(damage*({strength::%attacker%}*0.01+1) / (1+{defence::%victim%}*0.01+{defencearmor::%victim%}))%" parsed as number
+      chance of {lifesteal::%attacker%}%:
+        heal attacker by 0.1*damage
+      chance of {firepercentdmg::%attacker%}%:
+        ignite victim for 5 seconds
+      chance of {slowpercent::%attacker%}%:
+        apply slowness to victim for 5 seconds
+      chance of {critchance::%attacker%}%:
+        if distance between attacker and victim is less than 5:
+          set {_damage} to "%(2*({bonusclosedmg::%attacker%}+{bonusdmg::%attacker%}+damage) / ((1+{defencearmor::%victim%}*0.01+{bonusdefence::%victim%}*0.01)*(1+{defencemultiplier::%victim%}*0.01)))%" parsed as number
+        else:
+          set {_damage} to "%(2*({bonusdmg::%attacker%}+damage) / ((1+{defencearmor::%victim%}*0.01+{bonusdefence::%victim%}*0.01)*(1+{defencemultiplier::%victim%}*0.01)))%" parsed as number
+      else:
+        if distance between attacker and victim is less than 5:
+          set {_damage} to "%(({bonusclosedmg::%attacker%}+{bonusdmg::%attacker%}+damage) / ((1+{defencearmor::%victim%}*0.01+{bonusdefence::%victim%}*0.01)*(1+{defencemultiplier::%victim%}*0.01)))%" parsed as number
+        else:
+          set {_damage} to "%(({bonusdmg::%attacker%}+damage) / ((1+{defencearmor::%victim%}*0.01+{bonusdefence::%victim%}*0.01)*(1+{defencemultiplier::%victim%}*0.01)))%" parsed as number
+      chance of {defthrow::%victim%}%:
+        push attacker backwards at speed 2
+      chance of {defthorns::%victim%}%:
+        make victim damage attacker by {_damage}/2
+      chance of {defeater::%victim%}%:
+        set {_damage} to {_damage}/2
       set damage to {_damage}
+      chance of {defknockback::%victim%}%:
+        cancel event
+        damage victim by {_damage}
+      chance of {defdodge::%victim%}%:
+        set damage to 0
+        set {_damage} to "&cDodge"
   if attacker is player:
     if {_damage} is not set:
       set {_g} to name of victim's tool
       if {mobs.%{_g}%.defence} is not number:
         if {mobs.%{_g}%.dodgechance} is not number:
-          set {_damage} to damage*({strength::%attacker%}*0.01+1)
+          chance of {lifesteal::%attacker%}%:
+            heal attacker by 0.1*damage
+          chance of {slowpercent::%attacker%}%:
+            apply slowness to victim for 5 seconds
+          chance of {firepercentdmg::%attacker%}%:
+            ignite victim for 5 seconds
+          chance of {critchance::%attacker%}%:
+            if distance between attacker and victim is less than 5:
+              set {_damage} to 2*(damage+{bonusdmg::%attacker%}+{bonusclosedmg::%attacker%})
+            else:
+              set {_damage} to 2*(damage+{bonusdmg::%attacker%})
+          else:
+            if distance between attacker and victim is less than 5:
+              set {_damage} to damage+{bonusdmg::%attacker%}+{bonusclosedmg::%attacker%}
+            else:
+              set {_damage} to damage+{bonusdmg::%attacker%}
           set damage to {_damage}
       else:
         chance of {mobs.%{_g}%.dodgechance}:
           set damage to 0
           set {_damage} to "&cDodge"
         else:
-          set {_damage} to "%((damage*({strength::%attacker%}*0.01+1)) / {mobs.%{_g}%.defence})%" parsed as number
+          chance of {lifesteal::%attacker%}%:
+            heal attacker by 0.1*damage
+          chance of {slowpercent::%attacker%}%:
+            apply slowness to victim for 5 seconds
+          chance of {firepercentdmg::%attacker%}%:
+            ignite victim for 5 seconds
+          chance of {critchance::%attacker%}%:
+            if distance between attacker and victim is less than 5:
+              set {_damage} to "%(2*({bonusclosedmg::%attacker%}+{bonusdmg::%attacker%}+damage) / {mobs.%{_g}%.defence})%" parsed as number
+            else:
+              set {_damage} to "%(2*({bonusdmg::%attacker%}+damage) / {mobs.%{_g}%.defence})%" parsed as number
+          else:
+            if distance between attacker and victim is less than 5:
+              set {_damage} to "%(({bonusclosedmg::%attacker%}+{bonusdmg::%attacker%}+damage) / {mobs.%{_g}%.defence})%" parsed as number
+            else:
+              set {_damage} to "%(({bonusdmg::%attacker%}+damage) / {mobs.%{_g}%.defence})%" parsed as number
           set damage to {_damage}
-    spawn an armor stand at location at 1, 1, 1 in world "void"
+    spawn 1 of armor stand at location at 1, 1, 1 in world "void" with nbt nbt compound from "{CustomNameVisible:1,Invisible:1,Marker:1b,NoGravity:1b,Small:1,DisabledSlots:2039583}"
     set {_stand} to last spawned armor stand
-    add "{CustomNameVisible:1,Invisible:1,Marker:1b,NoGravity:1b,Small:1,DisabledSlots:2039583}" to nbt of {_stand}
     if {_damage} is "&cDodge":
       set {_damage} to "&eDodge" or "&e0" or "&eMiss" or "&eEvade"
       set name of {_stand} to "%{_damage}%"
@@ -99,11 +155,12 @@ on damage:
       if victim is not player:
         add  2*{_damage} to {strength.xp::%attacker%}
         if {strength.xp::%attacker%} >= {strength.xpneed::%attacker%}:
-          set {strength.xpneed::%attacker%} to 1.25*{strength.xpneed::%attacker%}
+          set {strength.xpneed::%attacker%} to {strength.xpneed::%attacker%} + 3500
           set {strength.xp::%attacker%} to 0
           add 1 to {strength::%attacker%}
           add 1 to {strength.pts::%attacker%}
-          send title " " with subtitle "&c&lStrength level increased" to attacker for 5 seconds with fadein 2 seconds and fade out 2 seconds
+          set {strength.pppe::%attacker%} to 0
+          send title "&c&lStrength level increased" with subtitle "&c&l+ 1 Damage perks point" to attacker for 5 seconds with fadein 2 seconds and fade out 2 seconds
           execute console command "/levelupsound %attacker%"
         set {_damagefinal.%attacker%} to 2*{_damage}
         add {_damagefinal.%attacker%} to {d.topdmg.%uuid of victim%::%attacker%}
@@ -119,6 +176,8 @@ on damage:
     kill {_stand}
 
 on damage:
+  if victim is armor stand:
+    stop
   wait 1 tick
   set {lastdamage.%uuid of attacker%} to now
   remove bossbar "damage.%uuid of attacker%"
@@ -155,11 +214,13 @@ on join:
 command /levelupsound [<player>]:
   permission: admin
   trigger:
-    play sound "block.note_block.harp" with pitch 0.4 to the arg-1
-    wait 0.3 seconds
-    play sound "block.note_block.harp" with pitch 0.9 to the arg-1
-    wait 0.3 seconds
+    play sound "item.goat_horn.sound.0" with pitch 1 to the arg-1
+    wait 2.2 seconds
     play sound "block.note_block.harp" with pitch 1.5 to the arg-1
+    wait 0.2 seconds
+    play sound "block.note_block.harp" with pitch 0.9 to the arg-1
+    wait 0.2 seconds
+    play sound "block.note_block.harp" with pitch 0.4 to the arg-1
 on death:
   clear drops
   if victim is player:
@@ -256,9 +317,16 @@ on right click:
     if {ShootCD::%player%} is not set:
       set {ShootCD::%player%} to now
     set {_time} to "%({_time}/10)% seconds" parsed as timespan
+    set {_x1} to distance between player and targeted block
+    set {_x2} to distance between player and targeted entity
     set {_x} to targeted entity
+    if {_x1} > {_x2}:
+      delete {_x1}
+    if {_x1} < {_x2}:
+      delete {_x2}
     add 1 to {_x}'s y-coordinate
     set {_y} to player
+    set {_l} to location of player
     add 1 to {_y}'s y-coordinate
     set {_range} to the 2nd line of the lore of the player's tool
     replace all "&eRange: " with "" in {_range}
@@ -267,32 +335,98 @@ on right click:
     replace all "&bColor: " with "" in {_color}
     if {_range} is not set:
       stop
-    if {_x} is not set:
-      if target block is not set:
-        stop
+    if {_x1} is set:
       if distance between player and target block is more than {_range}:
-        stop
-      if {_color} contains "red":
-        drawLine particle redstone, RGB 255, 0, 0, center player, target location of target block, id "%player%", rainbowMode true, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 1.2, 0, pulseDelay 1
-      else:
-        if {_color} contains "blue":
-          drawLine particle redstone, RGB 0, 0, 255, center player, target location of target block, id "%player%", rainbowMode true, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 1.2, 0, pulseDelay 1
-        else:
-          if {_color} contains "green":
-            drawLine particle redstone, RGB 0, 255, 0, center player, target location of target block, id "%player%", rainbowMode true, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 1.2, 0, pulseDelay 1  
-          else:
-            if {_color} contains "purple":
-              drawLine particle redstone, RGB 153, 0, 76, center player, target location of target block, id "%player%", rainbowMode true, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 1.2, 0, pulseDelay 1 
-            else:
-              drawLine particle redstone, RGB 0, 0, 0, center player, target location of target block, id "%player%", rainbowMode true, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 1.2, 0, pulseDelay 1
-    if {_x} is set:
+        set y-coordinate of {_l} to y-coordinate of {_l} +1.1
+        set {_v} to vector from yaw player's yaw and pitch player's pitch
+        set pitch of {_v} to pitch of {_v} -3
+        loop 60 times:
+          set standard length of {_v} to (loop-value)/2
+          set {_pewpew} to {_l} ~ {_v}
+          if {_color} is blue:
+            draw 1 of dust using dustOption(blue, 1) at {_pewpew}
+          if {_color} is green:
+            draw 1 of dust using dustOption(green, 1) at {_pewpew}
+          if {_color} is white:
+            draw 1 of dust using dustOption(white, 1) at {_pewpew}
+          if {_color} is purple:
+            draw 1 of dust using dustOption(purple, 1) at {_pewpew}
+          if {_color} is not "purple" or "green" or "blue" or "white":
+            draw 1 of dust using dustOption(blue, 1) at {_pewpew}
+        exit
+      set y-coordinate of {_l} to y-coordinate of {_l} +1.1
+      set {_v} to vector from yaw player's yaw and pitch player's pitch
+      set pitch of {_v} to pitch of {_v} -3
+      loop (distance between player and target block)*2 times:
+        set standard length of {_v} to (loop-value)/2
+        set {_pewpew} to {_l} ~ {_v}
+        if {_color} is blue:
+          draw 1 of dust using dustOption(blue, 1) at {_pewpew}
+        if {_color} is green:
+          draw 1 of dust using dustOption(green, 1) at {_pewpew}
+        if {_color} is white:
+          draw 1 of dust using dustOption(white, 1) at {_pewpew}
+        if {_color} is purple:
+          draw 1 of dust using dustOption(purple, 1) at {_pewpew}
+        if {_color} is not "purple" or "green" or "blue" or "white":
+          draw 1 of dust using dustOption(blue, 1) at {_pewpew}
+    if {_x1} is set:
       if distance between {_y} and {_x} is more than {_range}:
-        stop
+        set y-coordinate of {_l} to y-coordinate of {_l} +1.1
+        set {_v} to vector from yaw player's yaw and pitch player's pitch
+        set pitch of {_v} to pitch of {_v} -3
+        loop 60 times:
+          set standard length of {_v} to (loop-value)/2
+          set {_pewpew} to {_l} ~ {_v}
+          if {_color} is blue:
+            draw 1 of dust using dustOption(blue, 1) at {_pewpew}
+          if {_color} is green:
+            draw 1 of dust using dustOption(green, 1) at {_pewpew}
+          if {_color} is white:
+            draw 1 of dust using dustOption(white, 1) at {_pewpew}
+          if {_color} is purple:
+            draw 1 of dust using dustOption(purple, 1) at {_pewpew}
+          if {_color} is not "purple" or "green" or "blue" or "white":
+            draw 1 of dust using dustOption(blue, 1) at {_pewpew}
+        exit
+    if {_x1} is not set:
+      if {_x2} is not set:
+        set y-coordinate of {_l} to y-coordinate of {_l} +1.1
+        set {_v} to vector from yaw player's yaw and pitch player's pitch
+        set pitch of {_v} to pitch of {_v} -3
+        loop 30 times:
+          set standard length of {_v} to (loop-value)/2
+          set {_pewpew} to {_l} ~ {_v}
+          if {_color} is blue:
+            draw 1 of dust using dustOption(blue, 1) at {_pewpew}
+          if {_color} is green:
+            draw 1 of dust using dustOption(green, 1) at {_pewpew}
+          if {_color} is white:
+            draw 1 of dust using dustOption(white, 1) at {_pewpew}
+          if {_color} is purple:
+            draw 1 of dust using dustOption(purple, 1) at {_pewpew}
+          if {_color} is not "purple" or "green" or "blue" or "white":
+            draw 1 of dust using dustOption(blue, 1) at {_pewpew}
       set {_dmg} to the 1st line of the lore of the player's tool
       replace all "&cDamage: " with "" in {_dmg}
-      set {_dmg} to {_dmg} parsed as number
-      make player damage target entity by {_dmg}
-      drawLine particle redstone, RGB 0, 0, 0, center {_y}, target {_x}, id "%player%", rainbowMode false, solid false, density 5, length 0, zigZag count 0, height 0, visibleRange 32, displacementXYZ 0, 0, 0, pulseDelay 1
+      set {_dmg} to "%{_dmg}%" parsed as number
+      make player damage target entity by {_dmg}+{bonusrangedmg::%player%}
+      set y-coordinate of {_l} to y-coordinate of {_l} +1.1
+      set {_v} to vector from yaw player's yaw and pitch player's pitch
+      set pitch of {_v} to pitch of {_v} -3
+      loop (distance between {_y} and {_x})*2 times:
+        set standard length of {_v} to (loop-value)/2
+        set {_pewpew} to {_l} ~ {_v}
+        if {_color} is blue:
+          draw 1 of dust using dustOption(blue, 1) at {_pewpew}
+        if {_color} is green:
+          draw 1 of dust using dustOption(green, 1) at {_pewpew}
+        if {_color} is white:
+          draw 1 of dust using dustOption(white, 1) at {_pewpew}
+        if {_color} is purple:
+          draw 1 of dust using dustOption(purple, 1) at {_pewpew}
+        if {_color} is not "purple" or "green" or "blue" or "white":
+          draw 1 of dust using dustOption(blue, 1) at {_pewpew}
     send action bar "&4[&cI&7IIIIIIIII&4]" to player
     wait {_time}
     send action bar "&4[&cII&7IIIIIIII&4]" to player
@@ -318,7 +452,8 @@ on right click:
 on death:
   force victim to respawn
   wait 1 tick
-  set {_ship.respawn.location.X::%victim%} to ({ship.location.X::%victim%}-2.5)
-  set {_ship.respawn.location.Z::%victim%} to ({ship.location.Z::%victim%}-3.5)
-  teleport victim to location at {_ship.respawn.location.X::%victim%}, 62, {_ship.respawn.location.Z::%victim%}
-  apply blindness 3 to victim for 15 seconds
+  if {ship::%victim%} is set:
+    set {_ship.respawn.location.X::%victim%} to ({ship.location.X::%victim%}-2.5)
+    set {_ship.respawn.location.Z::%victim%} to ({ship.location.Z::%victim%}-3.5)
+    teleport victim to location at {_ship.respawn.location.X::%victim%}, 62, {_ship.respawn.location.Z::%victim%} in world "void"
+    apply blindness 3 to victim for 15 seconds
